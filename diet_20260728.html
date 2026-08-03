@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>식단 분석 · 2026.07.28</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
+  :root { --bg:#f7f7f5;--card:#fff;--border:#e8e8e4;--text:#1a1a1a;--muted:#999;--green:#3d9e5f;--green-bg:#edf7f1;--yellow:#d4920a;--yellow-bg:#fdf6e3;--red:#d04040;--red-bg:#fdf0f0;--blue:#3a6fd4;--blue-bg:#eef3fd;--tag-bg:#f0f0ec; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh;padding:28px 16px 60px;max-width:480px;margin:0 auto;}
+  .header{margin-bottom:20px;}
+  .date-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px;}
+  .date{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;}
+  .badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;}
+  .badge-active{background:var(--green-bg);color:var(--green);}
+  .badge-weekday{background:var(--tag-bg);color:var(--muted);}
+  .badge-kept{background:var(--green-bg);color:var(--green);}
+  .subtitle{font-size:11px;color:var(--muted);margin-top:2px;}
+  .hero-banner{background:var(--yellow-bg);border:1px solid #ecd8a0;border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+  .hero-icon{font-size:22px;}
+  .hero-text .ht{font-size:12px;font-weight:700;color:var(--yellow);margin-bottom:2px;}
+  .hero-text .hd{font-size:11px;color:#8a5f00;line-height:1.5;}
+  .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+  .summary-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+  .summary-box .s-label{font-size:10px;color:var(--muted);margin-bottom:4px;}
+  .summary-box .s-value{font-family:'DM Mono',monospace;font-size:17px;font-weight:500;line-height:1;}
+  .summary-box .s-unit{font-size:9px;color:var(--muted);margin-top:2px;}
+  .s-ok .s-value{color:var(--green);} .s-warn .s-value{color:var(--yellow);} .s-bad .s-value{color:var(--red);}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:14px;}
+  .card-title{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;padding:14px 16px 10px;border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;}
+  table{width:100%;border-collapse:collapse;font-size:12px;}
+  thead th{padding:8px 12px;text-align:right;font-size:10px;font-weight:500;color:var(--muted);background:#fafaf8;border-bottom:1px solid var(--border);}
+  thead th:first-child{text-align:left;} thead th:nth-child(2){text-align:left;}
+  tbody td{padding:11px 12px;border-bottom:1px solid var(--border);vertical-align:top;text-align:right;color:#555;font-family:'DM Mono',monospace;font-size:11px;}
+  tbody td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;}
+  tbody td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:11px;color:#666;line-height:1.5;}
+  tbody tr:last-child td{border-bottom:none;}
+  tfoot td{padding:10px 12px;font-size:11px;font-weight:700;text-align:right;background:#fafaf8;border-top:1px solid var(--border);font-family:'DM Mono',monospace;}
+  tfoot td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--text);}
+  tfoot td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--muted);font-size:10px;font-weight:400;}
+  .feedback-wrap{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px;}
+  .fb{border-radius:10px;padding:12px 14px;font-size:12px;line-height:1.7;}
+  .fb-ok{background:var(--green-bg);color:#2a7048;} .fb-warn{background:var(--yellow-bg);color:#8a5f00;} .fb-tip{background:var(--blue-bg);color:#2a4a9a;}
+  .fb-head{font-weight:700;margin-bottom:4px;font-size:12px;}
+  .summary-footer{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 16px;text-align:center;}
+  .summary-text{font-size:13px;color:#444;line-height:1.9;}
+  .highlight{color:var(--green);font-weight:700;}
+  .note{font-size:10px;color:var(--muted);padding:10px 16px;text-align:right;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-row">
+    <span class="date">2026.07.28 (화)</span>
+    <span class="badge badge-active">🏋️ PT 57분</span>
+    <span class="badge badge-weekday">💼 영업일</span>
+    <span class="badge badge-kept">✅ 간식규칙 지킴</span>
+  </div>
+  <div class="subtitle">운동일 기준 · 목표 1500–1700kcal</div>
+</div>
+
+<div class="hero-banner">
+  <div class="hero-icon">⚠️</div>
+  <div class="hero-text">
+    <div class="ht">PT날 섭취 부족 패턴, 오늘 다시 나왔어</div>
+    <div class="hd">7/20, 7/23에 이어 세 번째 — 7/24처럼 운동후 보강이 없었던 날이야.</div>
+  </div>
+</div>
+
+<div class="summary-grid">
+  <div class="summary-box s-bad">
+    <div class="s-label">칼로리</div>
+    <div class="s-value">~1,127</div>
+    <div class="s-unit">미달(25%)</div>
+  </div>
+  <div class="summary-box s-ok">
+    <div class="s-label">단백질</div>
+    <div class="s-value">~89g</div>
+    <div class="s-unit">거의 적정</div>
+  </div>
+  <div class="summary-box s-ok">
+    <div class="s-label">탄수화물</div>
+    <div class="s-value">~112g</div>
+    <div class="s-unit">달성 ✅</div>
+  </div>
+  <div class="summary-box s-bad">
+    <div class="s-label">지방</div>
+    <div class="s-value">~40g</div>
+    <div class="s-unit">미달(33%)</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">식사 기록</div>
+  <table>
+    <thead><tr><th>구분</th><th>메뉴</th><th>탄수</th><th>단백</th><th>지방</th><th>kcal</th></tr></thead>
+    <tbody>
+      <tr><td>점심</td><td>김치나베우동(돈까스 포함, 우동·국물 ½만 섭취)</td><td>~39g</td><td>~25g</td><td>~23g</td><td>~433</td></tr>
+      <tr><td>간식</td><td>방토170g + 프로틴요거트</td><td>~12g</td><td>~17g</td><td>~1g</td><td>~116</td></tr>
+      <tr><td>저녁</td><td>미니베이글, 무화과스프레드(요거트70g+건무화과12g+무설탕잼1ts), 계란1, 벨큐브치즈1, 당근라페40g, 체리100g</td><td>~53g</td><td>~25g</td><td>~15g</td><td>~448</td></tr>
+      <tr><td>운동 후</td><td>셀렉스 프로틴 음료</td><td>~1g</td><td>~20g</td><td>~1g</td><td>~99</td></tr>
+      <tr><td>야식</td><td>방토 170g</td><td>~7g</td><td>~2g</td><td>~0.3g</td><td>~31</td></tr>
+    </tbody>
+    <tfoot>
+      <tr><td>합계</td><td></td><td>~112g</td><td>~89g</td><td>~40g</td><td>~1,127</td></tr>
+      <tr><td>목표</td><td style="font-size:10px;color:var(--muted)">운동일</td><td style="color:var(--muted)">100–120</td><td style="color:var(--muted)">75–85</td><td style="color:var(--muted)">60–70</td><td style="color:var(--muted)">1500–1700</td></tr>
+    </tfoot>
+  </table>
+</div>
+
+<div class="card">
+  <div class="card-title">피드백</div>
+  <div class="feedback-wrap">
+    <div class="fb fb-ok">
+      <div class="fb-head">✅ 잘한 것</div>
+      PT 57분(비록 저강도지만 꾸준히) 챙겼고, 탄수는 목표에 딱 맞았어. 우동 국물을 절반만 먹은 것도 나트륨 관리 측면에서 좋은 선택이었고, 간식 규칙도 오늘은 잘 지켰어.
+    </div>
+    <div class="fb fb-warn">
+      <div class="fb-head">🔧 PT날 섭취 부족, 세 번째 반복</div>
+      칼로리 25% 미달, 지방 33% 미달 — 7/20·7/23에 이어 이번이 세 번째야. 흥미로운 건 7/24(100일차)엔 운동 후 바나나로 이 패턴을 확실히 개선했었는데, 오늘은 그 보강 없이 셀렉스만 마셔서 다시 부족해졌어. 저녁 메뉴도 계란·치즈·베이글처럼 가벼운 조합이라 지방이 특히 많이 빠졌어.
+    </div>
+    <div class="fb fb-tip">
+      <div class="fb-head">💡 참고</div>
+      7/24에 효과 봤던 방식 그대로 — PT 있는 날은 운동 후 바나나나 견과류를 셀렉스에 곁들이는 걸 아예 루틴으로 고정해두는 게 좋을 것 같아. 매번 기억해서 챙기기보다 "PT날 = 운동후 바나나"로 자동화하면 이 패턴이 안정될 거야.
+    </div>
+  </div>
+</div>
+
+<div class="summary-footer">
+  <div class="summary-text">
+    탄수·간식 규칙은 좋았지만, PT날 섭취 부족이 다시 나타났어.<br>
+    한 번은 이미 해결법을 찾았으니(7/24 바나나), 그걸 루틴으로 굳히면 될 것 같아.<br><br>
+    <span class="highlight">다음 PT날엔 운동 후 바나나 잊지 말자 👊</span>
+  </div>
+</div>
+
+</body>
+</html>
