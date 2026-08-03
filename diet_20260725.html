@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>식단 분석 · 2026.07.25</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
+  :root { --bg:#f7f7f5;--card:#fff;--border:#e8e8e4;--text:#1a1a1a;--muted:#999;--green:#3d9e5f;--green-bg:#edf7f1;--yellow:#d4920a;--yellow-bg:#fdf6e3;--red:#d04040;--red-bg:#fdf0f0;--blue:#3a6fd4;--blue-bg:#eef3fd;--tag-bg:#f0f0ec;--gold:#c9962c;--gold-bg:#fbf3e2; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh;padding:28px 16px 60px;max-width:480px;margin:0 auto;}
+  .header{margin-bottom:20px;}
+  .date-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px;}
+  .date{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;}
+  .badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;}
+  .badge-active{background:var(--green-bg);color:var(--green);}
+  .badge-weekend{background:var(--tag-bg);color:var(--muted);}
+  .badge-cheers{background:var(--gold-bg);color:var(--gold);border:1px solid #e8d4a0;}
+  .subtitle{font-size:11px;color:var(--muted);margin-top:2px;}
+  .milestone-banner{background:linear-gradient(135deg,var(--gold-bg),#fff);border:1px solid #e8d4a0;border-radius:14px;padding:18px 16px;margin-bottom:16px;text-align:center;}
+  .milestone-num{font-family:'DM Mono',monospace;font-size:32px;font-weight:700;color:var(--gold);line-height:1;}
+  .milestone-label{font-size:12px;color:#8a6a1f;margin-top:4px;font-weight:500;}
+  .milestone-sub{font-size:11px;color:#a5895a;margin-top:6px;line-height:1.6;}
+  .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+  .summary-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+  .summary-box .s-label{font-size:10px;color:var(--muted);margin-bottom:4px;}
+  .summary-box .s-value{font-family:'DM Mono',monospace;font-size:17px;font-weight:500;line-height:1;}
+  .summary-box .s-unit{font-size:9px;color:var(--muted);margin-top:2px;}
+  .s-ok .s-value{color:var(--green);} .s-cheers .s-value{color:var(--gold);}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:14px;}
+  .card-title{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;padding:14px 16px 10px;border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;}
+  table{width:100%;border-collapse:collapse;font-size:12px;}
+  thead th{padding:8px 12px;text-align:right;font-size:10px;font-weight:500;color:var(--muted);background:#fafaf8;border-bottom:1px solid var(--border);}
+  thead th:first-child{text-align:left;} thead th:nth-child(2){text-align:left;}
+  tbody td{padding:11px 12px;border-bottom:1px solid var(--border);vertical-align:top;text-align:right;color:#555;font-family:'DM Mono',monospace;font-size:11px;}
+  tbody td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;}
+  tbody td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:11px;color:#666;line-height:1.5;}
+  tbody tr:last-child td{border-bottom:none;}
+  tfoot td{padding:10px 12px;font-size:11px;font-weight:700;text-align:right;background:#fafaf8;border-top:1px solid var(--border);font-family:'DM Mono',monospace;}
+  tfoot td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--text);}
+  tfoot td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--muted);font-size:10px;font-weight:400;}
+  .feedback-wrap{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px;}
+  .fb{border-radius:10px;padding:12px 14px;font-size:12px;line-height:1.7;}
+  .fb-ok{background:var(--green-bg);color:#2a7048;} .fb-cheers{background:var(--gold-bg);color:#8a6a1f;}
+  .fb-head{font-weight:700;margin-bottom:4px;font-size:12px;}
+  .summary-footer{background:linear-gradient(135deg,var(--gold-bg),#fff);border:1px solid #e8d4a0;border-radius:14px;padding:20px 16px;text-align:center;}
+  .summary-text{font-size:13px;color:#444;line-height:1.9;}
+  .highlight{color:var(--gold);font-weight:700;}
+  .note{font-size:10px;color:var(--muted);padding:10px 16px;text-align:right;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-row">
+    <span class="date">2026.07.25 (토) · 101일차</span>
+    <span class="badge badge-active">🏋️ 근력53분+계단21분</span>
+    <span class="badge badge-weekend">비영업일</span>
+    <span class="badge badge-cheers">🥂 100일 축하 자리</span>
+  </div>
+  <div class="subtitle">오늘은 매크로보다 축하가 우선인 날 🎉</div>
+</div>
+
+<div class="milestone-banner">
+  <div class="milestone-num">🥂 101</div>
+  <div class="milestone-label">100일 무알콜 완주 후 첫 잔</div>
+  <div class="milestone-sub">4월 16일부터 이어온 금주, 오늘 회+와인으로 제대로 즐긴 하루야.<br>아침엔 근력+계단까지 챙기고 시작한 것도 인상적이었어.</div>
+</div>
+
+<div class="summary-grid">
+  <div class="summary-box s-cheers">
+    <div class="s-label">칼로리</div>
+    <div class="s-value">~2,548</div>
+    <div class="s-unit">축하의 날</div>
+  </div>
+  <div class="summary-box s-ok">
+    <div class="s-label">단백질</div>
+    <div class="s-value">~126g</div>
+    <div class="s-unit">넉넉함</div>
+  </div>
+  <div class="summary-box s-cheers">
+    <div class="s-label">탄수화물</div>
+    <div class="s-value">~236g</div>
+    <div class="s-unit">축하의 날</div>
+  </div>
+  <div class="summary-box s-cheers">
+    <div class="s-label">지방</div>
+    <div class="s-value">~82g</div>
+    <div class="s-unit">축하의 날</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">식사 기록</div>
+  <table>
+    <thead><tr><th>구분</th><th>메뉴</th><th>탄수</th><th>단백</th><th>지방</th><th>kcal</th></tr></thead>
+    <tbody>
+      <tr><td>점심</td><td>비프샐러드 (수비드 소고기100g, 바게트, 스프레드, 그릴야채, 생야채, 단호박)</td><td>~49g</td><td>~32g</td><td>~27g</td><td>~552</td></tr>
+      <tr><td>간식</td><td>무화과 통밀 캄파뉴 150g (무첨가)</td><td>~75g</td><td>~14g</td><td>~3g</td><td>~375</td></tr>
+      <tr><td>저녁</td><td>후토마끼, 참치회(사진의 1.5배), 와인 1병</td><td>~111g</td><td>~60g</td><td>~51g</td><td>~1,522</td></tr>
+      <tr><td>운동 후</td><td>셀렉스 프로틴 음료</td><td>~1g</td><td>~20g</td><td>~1g</td><td>~99</td></tr>
+    </tbody>
+    <tfoot>
+      <tr><td>합계</td><td></td><td>~236g</td><td>~126g</td><td>~82g</td><td>~2,548</td></tr>
+      <tr><td>참고</td><td style="font-size:10px;color:var(--muted)">평소 운동일 목표</td><td style="color:var(--muted)">100–120</td><td style="color:var(--muted)">75–85</td><td style="color:var(--muted)">60–70</td><td style="color:var(--muted)">1500–1700</td></tr>
+    </tfoot>
+  </table>
+</div>
+
+<div class="card">
+  <div class="card-title">피드백</div>
+  <div class="feedback-wrap">
+    <div class="fb fb-cheers">
+      <div class="fb-head">🥂 오늘은 이런 날</div>
+      100일 넘게 쌓아온 기록 뒤에 온 하루니까, 오늘은 평소처럼 초과·미달 따지지 않을게. 참치회 실컷 먹고, 스파클링와인으로 오랜만의 잔 기울인 거 — 계획했던 그대로, 딱 원하던 방식으로 즐긴 것 같아.
+    </div>
+    <div class="fb fb-ok">
+      <div class="fb-head">✅ 그래도 짚고 싶은 것</div>
+      축하 자리인데도 아침에 근력 53분+계단 21분(심박 157bpm)을 먼저 챙기고 시작한 거, 이게 100일 동안 쌓인 습관의 힘인 것 같아. 무화과 캄파뉴도 무첨가로 고른 것까지, 즐기는 와중에도 좋은 선택들이 곳곳에 있었어.
+    </div>
+  </div>
+</div>
+
+<div class="summary-footer">
+  <div class="summary-text">
+    100일 무알콜, 100일 기록 — 둘 다 완주하고 맞이한 첫 잔이었어.<br>
+    내일부터는 다시 평소 루틴으로 자연스럽게 돌아가면 돼.<br><br>
+    <span class="highlight">오늘 하루는 그냥 축하만 하자 🥂</span>
+  </div>
+</div>
+
+</body>
+</html>
