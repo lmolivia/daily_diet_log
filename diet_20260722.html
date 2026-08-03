@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>식단 분석 · 2026.07.22</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
+  :root { --bg:#f7f7f5;--card:#fff;--border:#e8e8e4;--text:#1a1a1a;--muted:#999;--green:#3d9e5f;--green-bg:#edf7f1;--yellow:#d4920a;--yellow-bg:#fdf6e3;--red:#d04040;--red-bg:#fdf0f0;--blue:#3a6fd4;--blue-bg:#eef3fd;--tag-bg:#f0f0ec; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh;padding:28px 16px 60px;max-width:480px;margin:0 auto;}
+  .header{margin-bottom:20px;}
+  .date-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px;}
+  .date{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;}
+  .badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;}
+  .badge-rest{background:var(--tag-bg);color:var(--muted);}
+  .badge-weekday{background:var(--tag-bg);color:var(--muted);}
+  .badge-rule{background:#eef3fd;color:#3a6fd4;border:1px solid #b8cef0;}
+  .subtitle{font-size:11px;color:var(--muted);margin-top:2px;}
+  .hero-banner{background:var(--green-bg);border:1px solid #b0ddc0;border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+  .hero-icon{font-size:22px;}
+  .hero-text .ht{font-size:12px;font-weight:700;color:var(--green);margin-bottom:2px;}
+  .hero-text .hd{font-size:11px;color:#4a8a60;line-height:1.5;}
+  .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+  .summary-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+  .summary-box .s-label{font-size:10px;color:var(--muted);margin-bottom:4px;}
+  .summary-box .s-value{font-family:'DM Mono',monospace;font-size:17px;font-weight:500;line-height:1;}
+  .summary-box .s-unit{font-size:9px;color:var(--muted);margin-top:2px;}
+  .s-ok .s-value{color:var(--green);} .s-warn .s-value{color:var(--yellow);} .s-bad .s-value{color:var(--red);}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:14px;}
+  .card-title{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;padding:14px 16px 10px;border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;}
+  table{width:100%;border-collapse:collapse;font-size:12px;}
+  thead th{padding:8px 12px;text-align:right;font-size:10px;font-weight:500;color:var(--muted);background:#fafaf8;border-bottom:1px solid var(--border);}
+  thead th:first-child{text-align:left;} thead th:nth-child(2){text-align:left;}
+  tbody td{padding:11px 12px;border-bottom:1px solid var(--border);vertical-align:top;text-align:right;color:#555;font-family:'DM Mono',monospace;font-size:11px;}
+  tbody td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;}
+  tbody td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:11px;color:#666;line-height:1.5;}
+  tbody tr:last-child td{border-bottom:none;}
+  tfoot td{padding:10px 12px;font-size:11px;font-weight:700;text-align:right;background:#fafaf8;border-top:1px solid var(--border);font-family:'DM Mono',monospace;}
+  tfoot td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--text);}
+  tfoot td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--muted);font-size:10px;font-weight:400;}
+  .progress-section{padding:14px 16px;}
+  .progress-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .progress-row:last-child{margin-bottom:0;}
+  .p-label{font-size:11px;color:var(--muted);width:40px;flex-shrink:0;}
+  .p-bar-wrap{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+  .p-bar{height:100%;border-radius:3px;}
+  .p-bar.ok{background:var(--green);} .p-bar.warn{background:var(--yellow);} .p-bar.bad{background:var(--red);}
+  .p-value{font-family:'DM Mono',monospace;font-size:11px;width:90px;text-align:right;flex-shrink:0;}
+  .p-value .actual{font-weight:500;} .p-value .sep{color:var(--border);margin:0 2px;} .p-value .target{color:var(--muted);}
+  .p-tag{font-size:10px;padding:2px 7px;border-radius:8px;min-width:60px;text-align:center;flex-shrink:0;}
+  .p-tag.ok{background:var(--green-bg);color:var(--green);} .p-tag.warn{background:var(--yellow-bg);color:var(--yellow);} .p-tag.bad{background:var(--red-bg);color:var(--red);}
+  .feedback-wrap{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px;}
+  .fb{border-radius:10px;padding:12px 14px;font-size:12px;line-height:1.7;}
+  .fb-ok{background:var(--green-bg);color:#2a7048;} .fb-warn{background:var(--yellow-bg);color:#8a5f00;} .fb-tip{background:var(--blue-bg);color:#2a4a9a;}
+  .fb-head{font-weight:700;margin-bottom:4px;font-size:12px;}
+  .summary-footer{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 16px;text-align:center;}
+  .summary-text{font-size:13px;color:#444;line-height:1.9;}
+  .highlight{color:var(--green);font-weight:700;}
+  .note{font-size:10px;color:var(--muted);padding:10px 16px;text-align:right;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-row">
+    <span class="date">2026.07.22 (수) · 98일차</span>
+    <span class="badge badge-rest">운동 없음</span>
+    <span class="badge badge-weekday">💼 영업일</span>
+    <span class="badge badge-rule">🚫🍪 탄수성간식 금지 3일차</span>
+  </div>
+  <div class="subtitle">비운동일 기준 · 목표 1300–1500kcal</div>
+</div>
+
+<div class="hero-banner">
+  <div class="hero-icon">🎯</div>
+  <div class="hero-text">
+    <div class="ht">피곤한 날에도 규칙은 지킴 — 3일차</div>
+    <div class="hd">크레페도 30g만 소량으로 조절한 게 눈에 띄어.</div>
+  </div>
+</div>
+
+<div class="summary-grid">
+  <div class="summary-box s-ok">
+    <div class="s-label">칼로리</div>
+    <div class="s-value">~1,420</div>
+    <div class="s-unit">달성 ✅</div>
+  </div>
+  <div class="summary-box s-warn">
+    <div class="s-label">단백질</div>
+    <div class="s-value">~99g</div>
+    <div class="s-unit">초과(17%)</div>
+  </div>
+  <div class="summary-box s-ok">
+    <div class="s-label">탄수화물</div>
+    <div class="s-value">~125g</div>
+    <div class="s-unit">거의 적정</div>
+  </div>
+  <div class="summary-box s-ok">
+    <div class="s-label">지방</div>
+    <div class="s-value">~57g</div>
+    <div class="s-unit">거의 적정</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">식사 기록</div>
+  <table>
+    <thead><tr><th>구분</th><th>메뉴</th><th>탄수</th><th>단백</th><th>지방</th><th>kcal</th></tr></thead>
+    <tbody>
+      <tr><td>점심</td><td>우동 0.8인분(국물 거의 안먹음) + 돈가스</td><td>~69g</td><td>~40g</td><td>~36g</td><td>~768</td></tr>
+      <tr><td>간식</td><td>방토170g + 프로틴요거트</td><td>~12g</td><td>~17g</td><td>~1g</td><td>~116</td></tr>
+      <tr><td>저녁</td><td>크레페30g, 당근라페30g, 계란2개(노른자1개), 벨큐브치즈2개, 무화과스프레드</td><td>~38g</td><td>~31g</td><td>~20g</td><td>~461</td></tr>
+      <tr><td>야식</td><td>닭가슴살 육포</td><td>~6g</td><td>~12g</td><td>~0.5g</td><td>~75</td></tr>
+    </tbody>
+    <tfoot>
+      <tr><td>합계</td><td></td><td>~125g</td><td>~99g</td><td>~57g</td><td>~1,420</td></tr>
+      <tr><td>목표</td><td style="font-size:10px;color:var(--muted)">비운동일</td><td style="color:var(--muted)">100–120</td><td style="color:var(--muted)">75–85</td><td style="color:var(--muted)">45–55</td><td style="color:var(--muted)">1300–1500</td></tr>
+    </tfoot>
+  </table>
+</div>
+
+<div class="card">
+  <div class="card-title">목표 대비 달성률</div>
+  <div class="progress-section">
+    <div class="progress-row"><span class="p-label">칼로리</span><div class="p-bar-wrap"><div class="p-bar ok" style="width:95%"></div></div><span class="p-value"><span class="actual">~1,420</span><span class="sep">/</span><span class="target">1,400</span></span><span class="p-tag ok">달성 ✅</span></div>
+    <div class="progress-row"><span class="p-label">단백질</span><div class="p-bar-wrap"><div class="p-bar warn" style="width:100%"></div></div><span class="p-value"><span class="actual">~99g</span><span class="sep">/</span><span class="target">85g</span></span><span class="p-tag warn">초과(17%)</span></div>
+    <div class="progress-row"><span class="p-label">탄수화물</span><div class="p-bar-wrap"><div class="p-bar ok" style="width:100%"></div></div><span class="p-value"><span class="actual">~125g</span><span class="sep">/</span><span class="target">120g</span></span><span class="p-tag ok">근접(4%)</span></div>
+    <div class="progress-row"><span class="p-label">지방</span><div class="p-bar-wrap"><div class="p-bar ok" style="width:100%"></div></div><span class="p-value"><span class="actual">~57g</span><span class="sep">/</span><span class="target">55g</span></span><span class="p-tag ok">근접(4%)</span></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">피드백</div>
+  <div class="feedback-wrap">
+    <div class="fb fb-ok">
+      <div class="fb-head">✅ 잘한 것</div>
+      2시에 잠들어서 피곤한 날인데도 탄수성 간식 금지 규칙(3일차)을 지켰고, 크레페도 지난번(60g)보다 절반인 30g으로 스스로 조절했어. 칼로리·탄수·지방 전부 목표 범위에 딱 들어온, 최근 중 가장 안정적인 하루야.
+    </div>
+    <div class="fb fb-warn">
+      <div class="fb-head">🔧 아주 사소하게</div>
+      단백질만 99g으로 17% 초과인데, 우동+돈가스(단백40g)에 저녁 계란·치즈·요거트가 겹치면서 누적된 거야. 문제 되는 수준은 아니고, 최근 자주 나오는 패턴이라 계속 참고만 하면 될 것 같아.
+    </div>
+    <div class="fb fb-tip">
+      <div class="fb-head">💡 참고</div>
+      늦게 잔 날 운동을 건너뛴 건 잘한 판단이야 — 컨디션 안 좋을 때 억지로 운동하는 것보다 쉬는 게 회복엔 더 나아. 오늘처럼 식단이 안정적이면 운동 하루 쉬는 건 전혀 문제없어.
+    </div>
+  </div>
+</div>
+
+<div class="summary-footer">
+  <div class="summary-text">
+    피곤한 날이었는데도 오히려 최근 중 가장 안정적인 숫자가 나왔어.<br>
+    간식 규칙도 3일째, 크레페 양도 스스로 줄인 게 눈에 띄는 하루야.<br><br>
+    <span class="highlight">잘 쉬고 내일 다시 이어가면 돼 👊</span>
+  </div>
+</div>
+
+</body>
+</html>
