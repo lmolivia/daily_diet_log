@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>식단 분석 · 2026.07.31</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
+  :root { --bg:#f7f7f5;--card:#fff;--border:#e8e8e4;--text:#1a1a1a;--muted:#999;--green:#3d9e5f;--green-bg:#edf7f1;--yellow:#d4920a;--yellow-bg:#fdf6e3;--red:#d04040;--red-bg:#fdf0f0;--blue:#3a6fd4;--blue-bg:#eef3fd;--tag-bg:#f0f0ec; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh;padding:28px 16px 60px;max-width:480px;margin:0 auto;}
+  .header{margin-bottom:20px;}
+  .date-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px;}
+  .date{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;}
+  .badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;}
+  .badge-active{background:var(--green-bg);color:var(--green);}
+  .badge-weekend{background:var(--tag-bg);color:var(--muted);}
+  .badge-plan{background:var(--blue-bg);color:var(--blue);border:1px solid #b8cef0;}
+  .subtitle{font-size:11px;color:var(--muted);margin-top:2px;}
+  .hero-banner{background:var(--green-bg);border:1px solid #b0ddc0;border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+  .hero-icon{font-size:22px;}
+  .hero-text .ht{font-size:12px;font-weight:700;color:var(--green);margin-bottom:2px;}
+  .hero-text .hd{font-size:11px;color:#4a8a60;line-height:1.5;}
+  .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px;}
+  .summary-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+  .summary-box .s-label{font-size:10px;color:var(--muted);margin-bottom:4px;}
+  .summary-box .s-value{font-family:'DM Mono',monospace;font-size:17px;font-weight:500;line-height:1;}
+  .summary-box .s-unit{font-size:9px;color:var(--muted);margin-top:2px;}
+  .s-ok .s-value{color:var(--green);} .s-warn .s-value{color:var(--yellow);} .s-bad .s-value{color:var(--red);}
+  .alc-note{font-size:10px;color:var(--muted);text-align:center;margin-bottom:16px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:14px;}
+  .card-title{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;padding:14px 16px 10px;border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;}
+  table{width:100%;border-collapse:collapse;font-size:12px;}
+  thead th{padding:8px 12px;text-align:right;font-size:10px;font-weight:500;color:var(--muted);background:#fafaf8;border-bottom:1px solid var(--border);}
+  thead th:first-child{text-align:left;} thead th:nth-child(2){text-align:left;}
+  tbody td{padding:11px 12px;border-bottom:1px solid var(--border);vertical-align:top;text-align:right;color:#555;font-family:'DM Mono',monospace;font-size:11px;}
+  tbody td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;}
+  tbody td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:11px;color:#666;line-height:1.5;}
+  tbody tr:last-child td{border-bottom:none;}
+  tfoot td{padding:10px 12px;font-size:11px;font-weight:700;text-align:right;background:#fafaf8;border-top:1px solid var(--border);font-family:'DM Mono',monospace;}
+  tfoot td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--text);}
+  tfoot td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--muted);font-size:10px;font-weight:400;}
+  .feedback-wrap{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px;}
+  .fb{border-radius:10px;padding:12px 14px;font-size:12px;line-height:1.7;}
+  .fb-ok{background:var(--green-bg);color:#2a7048;} .fb-warn{background:var(--yellow-bg);color:#8a5f00;} .fb-tip{background:var(--blue-bg);color:#2a4a9a;}
+  .fb-head{font-weight:700;margin-bottom:4px;font-size:12px;}
+  .summary-footer{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 16px;text-align:center;}
+  .summary-text{font-size:13px;color:#444;line-height:1.9;}
+  .highlight{color:var(--green);font-weight:700;}
+  .note{font-size:10px;color:var(--muted);padding:10px 16px;text-align:right;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-row">
+    <span class="date">2026.07.31 (금)</span>
+    <span class="badge badge-active">🪜 계단 30분</span>
+    <span class="badge badge-plan">🍶 계획된 혼술</span>
+  </div>
+  <div class="subtitle">운동일 기준 · 목표 1500–1700kcal</div>
+</div>
+
+<div class="hero-banner">
+  <div class="hero-icon">🥬</div>
+  <div class="hero-text">
+    <div class="ht">술자리 메뉴 자체가 이미 관리형이었어</div>
+    <div class="hd">냉수육, 알룰로스 소스, 저당쌈무 — 다 신경 쓴 선택들이야.</div>
+  </div>
+</div>
+
+<div class="summary-grid">
+  <div class="summary-box s-warn">
+    <div class="s-label">칼로리</div>
+    <div class="s-value">~2,183</div>
+    <div class="s-unit">초과(28%)</div>
+  </div>
+  <div class="summary-box s-warn">
+    <div class="s-label">단백질</div>
+    <div class="s-value">~123g</div>
+    <div class="s-unit">초과(45%)</div>
+  </div>
+  <div class="summary-box s-ok">
+    <div class="s-label">탄수화물</div>
+    <div class="s-value">~115g</div>
+    <div class="s-unit">거의 적정</div>
+  </div>
+  <div class="summary-box s-ok">
+    <div class="s-label">지방</div>
+    <div class="s-value">~66g</div>
+    <div class="s-unit">거의 적정</div>
+  </div>
+</div>
+<div class="alc-note">※ 술(카스라이트+소주1.5병)만 따로 빼면 식사 자체는 ~1,488kcal / 탄수98g / 단백122g / 지방66g — 운동일 목표에 거의 그대로 들어맞아</div>
+
+<div class="card">
+  <div class="card-title">식사 기록</div>
+  <table>
+    <thead><tr><th>구분</th><th>메뉴</th><th>탄수</th><th>단백</th><th>지방</th><th>kcal</th></tr></thead>
+    <tbody>
+      <tr><td>점심</td><td>콜드파스타(트로피에50g, 새우120g, 방토100g, 아스파라거스60g, 계란1, 올리브오일1TS, 홀그레인머스타드1.5ts) + 라떼</td><td>~55g</td><td>~53g</td><td>~23g</td><td>~627</td></tr>
+      <tr><td>간식</td><td>프로틴요거트, 블루베리40g, 방토150g, 하루견과1봉지</td><td>~21g</td><td>~20g</td><td>~14g</td><td>~280</td></tr>
+      <tr><td>간식2</td><td>계란1개 + 벨큐브치즈1개 (운동 전 허기용)</td><td>~1g</td><td>~10g</td><td>~11g</td><td>~142</td></tr>
+      <tr><td>저녁</td><td>냉수육(앞다리180g), 비빔면(콩단백면, 알룰로스소스, 오이½), 깻잎, 저당쌈무</td><td>~20g</td><td>~39g</td><td>~20g</td><td>~439</td></tr>
+      <tr><td>음주</td><td>카스라이트500ml(125kcal) + 소주 1.5병</td><td>~17g</td><td>~1g</td><td>0g</td><td>~695</td></tr>
+    </tbody>
+    <tfoot>
+      <tr><td>합계</td><td></td><td>~115g</td><td>~123g</td><td>~66g</td><td>~2,183</td></tr>
+      <tr><td>목표</td><td style="font-size:10px;color:var(--muted)">운동일</td><td style="color:var(--muted)">100–120</td><td style="color:var(--muted)">75–85</td><td style="color:var(--muted)">60–70</td><td style="color:var(--muted)">1500–1700</td></tr>
+    </tfoot>
+  </table>
+</div>
+
+<div class="card">
+  <div class="card-title">피드백</div>
+  <div class="feedback-wrap">
+    <div class="fb fb-ok">
+      <div class="fb-head">✅ 잘한 것</div>
+      계단 30분(심박 152bpm)으로 운동 먼저 챙기고 시작한 것도 좋았고, 무엇보다 술자리 메뉴 선택이 훌륭했어 — 냉수육으로 저지방 단백질 챙기고, 비빔면은 콩단백면+알룰로스 저당소스로 만들고, 쌈무까지 저당으로 골랐어. 술 빼고 보면 오늘 식사는 운동일 목표에 거의 완벽하게 들어맞아.
+    </div>
+    <div class="fb fb-warn">
+      <div class="fb-head">🔧 참고</div>
+      칼로리·단백질 초과는 거의 다 술(695kcal)에서 나온 거야. 소주 1.5병이면 알코올 자체 칼로리가 상당하니 자연스러운 결과고, 계획하고 마신 자리니 특별히 걱정할 부분은 아니야.
+    </div>
+    <div class="fb fb-tip">
+      <div class="fb-head">💡 참고</div>
+      다음날 컨디션 체크만 가볍게 해봐 — 저번에 얘기했던 "피곤함도 숙취"라는 기준으로.
+    </div>
+  </div>
+</div>
+
+<div class="summary-footer">
+  <div class="summary-text">
+    술자리 안주 선택 자체가 이미 관리형이었던 하루야.<br>
+    식사만 보면 운동일 목표에 거의 정확히 맞아떨어져 — 알코올을 뺀 나머지는 훌륭했어.<br><br>
+    <span class="highlight">계획한 대로 즐긴 하루, 그걸로 충분해 🥂</span>
+  </div>
+</div>
+
+</body>
+</html>
