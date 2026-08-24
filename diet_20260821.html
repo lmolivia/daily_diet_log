@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>식단 분석 · 2026.08.21</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
+  :root { --bg:#f7f7f5;--card:#fff;--border:#e8e8e4;--text:#1a1a1a;--muted:#999;--green:#3d9e5f;--green-bg:#edf7f1;--yellow:#d4920a;--yellow-bg:#fdf6e3;--red:#d04040;--red-bg:#fdf0f0;--blue:#3a6fd4;--blue-bg:#eef3fd;--tag-bg:#f0f0ec; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh;padding:28px 16px 60px;max-width:480px;margin:0 auto;}
+  .header{margin-bottom:20px;}
+  .date-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px;}
+  .date{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;}
+  .badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;}
+  .badge-rest{background:var(--tag-bg);color:var(--muted);}
+  .badge-weekday{background:var(--tag-bg);color:var(--muted);}
+  .subtitle{font-size:11px;color:var(--muted);margin-top:2px;}
+  .hero-banner{background:var(--green-bg);border:1px solid #b0ddc0;border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+  .hero-icon{font-size:22px;}
+  .hero-text .ht{font-size:12px;font-weight:700;color:var(--green);margin-bottom:2px;}
+  .hero-text .hd{font-size:11px;color:#4a8a60;line-height:1.5;}
+  .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+  .summary-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+  .summary-box .s-label{font-size:10px;color:var(--muted);margin-bottom:4px;}
+  .summary-box .s-value{font-family:'DM Mono',monospace;font-size:17px;font-weight:500;line-height:1;}
+  .summary-box .s-unit{font-size:9px;color:var(--muted);margin-top:2px;}
+  .s-ok .s-value{color:var(--green);} .s-warn .s-value{color:var(--yellow);} .s-bad .s-value{color:var(--red);}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:14px;}
+  .card-title{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;padding:14px 16px 10px;border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;}
+  table{width:100%;border-collapse:collapse;font-size:12px;}
+  thead th{padding:8px 12px;text-align:right;font-size:10px;font-weight:500;color:var(--muted);background:#fafaf8;border-bottom:1px solid var(--border);}
+  thead th:first-child{text-align:left;} thead th:nth-child(2){text-align:left;}
+  tbody td{padding:11px 12px;border-bottom:1px solid var(--border);vertical-align:top;text-align:right;color:#555;font-family:'DM Mono',monospace;font-size:11px;}
+  tbody td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;}
+  tbody td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:11px;color:#666;line-height:1.5;}
+  tbody tr:last-child td{border-bottom:none;}
+  tfoot td{padding:10px 12px;font-size:11px;font-weight:700;text-align:right;background:#fafaf8;border-top:1px solid var(--border);font-family:'DM Mono',monospace;}
+  tfoot td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--text);}
+  tfoot td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--muted);font-size:10px;font-weight:400;}
+  .feedback-wrap{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px;}
+  .fb{border-radius:10px;padding:12px 14px;font-size:12px;line-height:1.7;}
+  .fb-ok{background:var(--green-bg);color:#2a7048;} .fb-warn{background:var(--yellow-bg);color:#8a5f00;} .fb-tip{background:var(--blue-bg);color:#2a4a9a;}
+  .fb-head{font-weight:700;margin-bottom:4px;font-size:12px;}
+  .summary-footer{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 16px;text-align:center;}
+  .summary-text{font-size:13px;color:#444;line-height:1.9;}
+  .highlight{color:var(--green);font-weight:700;}
+  .note{font-size:10px;color:var(--muted);padding:10px 16px;text-align:right;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-row">
+    <span class="date">2026.08.21 (금)</span>
+    <span class="badge badge-rest">운동 없음</span>
+    <span class="badge badge-weekday">💼 영업일</span>
+  </div>
+  <div class="subtitle">비운동일 기준 · 목표 1300–1500kcal</div>
+</div>
+
+<div class="hero-banner">
+  <div class="hero-icon">🐟</div>
+  <div class="hero-text">
+    <div class="ht">곰탕 밥 1스푼, 회는 담백하게 — 생각보다 안정적인 하루</div>
+    <div class="hd">지방은 오히려 딱 목표선에 맞았어.</div>
+  </div>
+</div>
+
+<div class="summary-grid">
+  <div class="summary-box s-warn">
+    <div class="s-label">칼로리</div>
+    <div class="s-value">~1,716</div>
+    <div class="s-unit">초과(14%)</div>
+  </div>
+  <div class="summary-box s-warn">
+    <div class="s-label">단백질</div>
+    <div class="s-value">~103g</div>
+    <div class="s-unit">초과(21%)</div>
+  </div>
+  <div class="summary-box s-ok">
+    <div class="s-label">탄수화물</div>
+    <div class="s-value">~123g</div>
+    <div class="s-unit">거의 적정</div>
+  </div>
+  <div class="summary-box s-ok">
+    <div class="s-label">지방</div>
+    <div class="s-value">~45g</div>
+    <div class="s-unit">달성 ✅</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">식사 기록</div>
+  <table>
+    <thead><tr><th>구분</th><th>메뉴</th><th>탄수</th><th>단백</th><th>지방</th><th>kcal</th></tr></thead>
+    <tbody>
+      <tr><td>점심</td><td>나주곰탕(밥 1스푼, 건더기 위주)</td><td>~18g</td><td>~53g</td><td>~18g</td><td>~446</td></tr>
+      <tr><td>간식</td><td>스콘</td><td>~38g</td><td>~6g</td><td>~14g</td><td>~300</td></tr>
+      <tr><td>저녁</td><td>후토마끼 6pcs, 광어회 10점, 드라이화이트와인 1병</td><td>~67g</td><td>~44g</td><td>~12g</td><td>~970</td></tr>
+    </tbody>
+    <tfoot>
+      <tr><td>합계</td><td></td><td>~123g</td><td>~103g</td><td>~45g</td><td>~1,716</td></tr>
+      <tr><td>목표</td><td style="font-size:10px;color:var(--muted)">비운동일</td><td style="color:var(--muted)">100–120</td><td style="color:var(--muted)">75–85</td><td style="color:var(--muted)">45–55</td><td style="color:var(--muted)">1300–1500</td></tr>
+    </tfoot>
+  </table>
+</div>
+
+<div class="card">
+  <div class="card-title">피드백</div>
+  <div class="feedback-wrap">
+    <div class="fb fb-ok">
+      <div class="fb-head">✅ 잘한 것</div>
+      곰탕에서 밥 1스푼만 먹고 건더기 위주로 챙긴 것, 저녁도 회·후토마끼로 담백하게 간 것 — 지방은 오히려 목표에 정확히 맞았어. 생각보다 훨씬 안정적인 하루였어.
+    </div>
+    <div class="fb fb-warn">
+      <div class="fb-head">🔧 참고</div>
+      칼로리·단백질이 좀 초과됐는데, 곰탕 자체가 고기 듬뿍인 집이라 단백질이 크게 들어온 데다 와인까지 더해진 결과야. 나쁘지 않은 조합이고, 술 자체보다는 곰탕 단백질량이 오늘의 주요인이었어.
+    </div>
+  </div>
+</div>
+
+<div class="summary-footer">
+  <div class="summary-text">
+    미안해할 정도로 나쁜 하루는 아니었어 — 지방은 딱 맞았고 탄수도 거의 정확했어.<br>
+    곰탕이 워낙 고기가 많은 집이라 단백질이 자연스럽게 높아진 것뿐이야.<br><br>
+    <span class="highlight">담백하게 잘 챙긴 하루였어 👊</span>
+  </div>
+</div>
+
+</body>
+</html>

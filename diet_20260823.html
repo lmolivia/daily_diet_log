@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>식단 분석 · 2026.08.23</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
+  :root { --bg:#f7f7f5;--card:#fff;--border:#e8e8e4;--text:#1a1a1a;--muted:#999;--green:#3d9e5f;--green-bg:#edf7f1;--yellow:#d4920a;--yellow-bg:#fdf6e3;--red:#d04040;--red-bg:#fdf0f0;--blue:#3a6fd4;--blue-bg:#eef3fd;--tag-bg:#f0f0ec; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh;padding:28px 16px 60px;max-width:480px;margin:0 auto;}
+  .header{margin-bottom:20px;}
+  .date-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px;}
+  .date{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;}
+  .badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;}
+  .badge-active{background:var(--green-bg);color:var(--green);}
+  .badge-weekend{background:var(--tag-bg);color:var(--muted);}
+  .subtitle{font-size:11px;color:var(--muted);margin-top:2px;}
+  .hero-banner{background:var(--yellow-bg);border:1px solid #ecd8a0;border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+  .hero-icon{font-size:22px;}
+  .hero-text .ht{font-size:12px;font-weight:700;color:var(--yellow);margin-bottom:2px;}
+  .hero-text .hd{font-size:11px;color:#8a5f00;line-height:1.5;}
+  .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+  .summary-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+  .summary-box .s-label{font-size:10px;color:var(--muted);margin-bottom:4px;}
+  .summary-box .s-value{font-family:'DM Mono',monospace;font-size:17px;font-weight:500;line-height:1;}
+  .summary-box .s-unit{font-size:9px;color:var(--muted);margin-top:2px;}
+  .s-ok .s-value{color:var(--green);} .s-warn .s-value{color:var(--yellow);} .s-bad .s-value{color:var(--red);}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:14px;}
+  .card-title{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;padding:14px 16px 10px;border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;}
+  table{width:100%;border-collapse:collapse;font-size:12px;}
+  thead th{padding:8px 12px;text-align:right;font-size:10px;font-weight:500;color:var(--muted);background:#fafaf8;border-bottom:1px solid var(--border);}
+  thead th:first-child{text-align:left;} thead th:nth-child(2){text-align:left;}
+  tbody td{padding:11px 12px;border-bottom:1px solid var(--border);vertical-align:top;text-align:right;color:#555;font-family:'DM Mono',monospace;font-size:11px;}
+  tbody td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;}
+  tbody td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:11px;color:#666;line-height:1.5;}
+  tbody tr:last-child td{border-bottom:none;}
+  tfoot td{padding:10px 12px;font-size:11px;font-weight:700;text-align:right;background:#fafaf8;border-top:1px solid var(--border);font-family:'DM Mono',monospace;}
+  tfoot td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--text);}
+  tfoot td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--muted);font-size:10px;font-weight:400;}
+  .feedback-wrap{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px;}
+  .fb{border-radius:10px;padding:12px 14px;font-size:12px;line-height:1.7;}
+  .fb-ok{background:var(--green-bg);color:#2a7048;} .fb-warn{background:var(--yellow-bg);color:#8a5f00;} .fb-tip{background:var(--blue-bg);color:#2a4a9a;}
+  .fb-head{font-weight:700;margin-bottom:4px;font-size:12px;}
+  .summary-footer{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 16px;text-align:center;}
+  .summary-text{font-size:13px;color:#444;line-height:1.9;}
+  .highlight{color:var(--green);font-weight:700;}
+  .note{font-size:10px;color:var(--muted);padding:10px 16px;text-align:right;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-row">
+    <span class="date">2026.08.23 (일)</span>
+    <span class="badge badge-active">🏋️ 근력60분+계단30분</span>
+    <span class="badge badge-weekend">비영업일</span>
+  </div>
+  <div class="subtitle">운동일 기준 · 목표 1500–1700kcal</div>
+</div>
+
+<div class="hero-banner">
+  <div class="hero-icon">🍈</div>
+  <div class="hero-text">
+    <div class="ht">오늘의 숨은 주인공은 무화과 — 하루 총 5개</div>
+    <div class="hd">점심 2개+저녁 3개, 탄수 초과의 상당 부분이 여기서 왔어.</div>
+  </div>
+</div>
+
+<div class="summary-grid">
+  <div class="summary-box s-ok">
+    <div class="s-label">칼로리</div>
+    <div class="s-value">~1,694</div>
+    <div class="s-unit">달성 ✅</div>
+  </div>
+  <div class="summary-box s-ok">
+    <div class="s-label">단백질</div>
+    <div class="s-value">~74g</div>
+    <div class="s-unit">거의 적정</div>
+  </div>
+  <div class="summary-box s-warn">
+    <div class="s-label">탄수화물</div>
+    <div class="s-value">~162g</div>
+    <div class="s-unit">초과(35%)</div>
+  </div>
+  <div class="summary-box s-bad">
+    <div class="s-label">지방</div>
+    <div class="s-value">~38g</div>
+    <div class="s-unit">미달(37%)</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">식사 기록</div>
+  <table>
+    <thead><tr><th>구분</th><th>메뉴</th><th>탄수</th><th>단백</th><th>지방</th><th>kcal</th></tr></thead>
+    <tbody>
+      <tr><td>점심</td><td>베이글샌드위치(저지방햄60g, 계란1, 슬라이스치즈1) + 샐러드(오일없는드레싱, 야채100g, 무화과2개) + 탄산수</td><td>~58g</td><td>~33g</td><td>~16g</td><td>~491</td></tr>
+      <tr><td>간식</td><td>스콘 1개</td><td>~38g</td><td>~6g</td><td>~14g</td><td>~300</td></tr>
+      <tr><td>저녁</td><td>골뱅이무침(골뱅이130g, 오이1, 콩단백면, 홈메이드소스, 계란1) + 무화과3개 + 드라이화이트와인 1병</td><td>~67g</td><td>~34g</td><td>~8g</td><td>~903</td></tr>
+    </tbody>
+    <tfoot>
+      <tr><td>합계</td><td></td><td>~162g</td><td>~74g</td><td>~38g</td><td>~1,694</td></tr>
+      <tr><td>목표</td><td style="font-size:10px;color:var(--muted)">운동일</td><td style="color:var(--muted)">100–120</td><td style="color:var(--muted)">75–85</td><td style="color:var(--muted)">60–70</td><td style="color:var(--muted)">1500–1700</td></tr>
+    </tfoot>
+  </table>
+</div>
+
+<div class="card">
+  <div class="card-title">피드백</div>
+  <div class="feedback-wrap">
+    <div class="fb fb-ok">
+      <div class="fb-head">✅ 잘한 것</div>
+      근력 60분+계단 30분(심박150bpm)까지 확실히 챙겼고, 오일 없는 드레싱·저지방햄 등 지방 관리 신경 쓴 게 곳곳에 보였어. 칼로리·단백질 다 목표 범위에 잘 맞았어.
+    </div>
+    <div class="fb fb-warn">
+      <div class="fb-head">🔧 오늘 숫자</div>
+      탄수 162g으로 35% 초과됐는데, 무화과가 하루에 5개(점심2+저녁3)나 등장하면서 탄수 47g 정도를 차지했어 — 과일이라 죄책감 가질 건 아니지만, 스콘·와인까지 더해지며 전체 탄수가 크게 쌓였어. 반대로 지방은 37% 부족한데, 오늘 메뉴 전반이 지방 관리를 워낙 잘한 결과이기도 해.
+    </div>
+    <div class="fb fb-tip">
+      <div class="fb-head">💡 참고</div>
+      무화과 좋아하는 시즌인가봐 — 다음에 하루에 여러 번 먹는 날은 다른 탄수(스콘 등)를 살짝 줄이면 균형 맞추기 편할 것 같아.
+    </div>
+  </div>
+</div>
+
+<div class="summary-footer">
+  <div class="summary-text">
+    운동도, 지방 관리도 잘한 하루야. 탄수는 무화과가 주인공이었어.<br>
+    과일 위주 초과라 크게 걱정할 정도는 아니야.<br><br>
+    <span class="highlight">무화과 시즌 잘 즐기고 있네 👊</span>
+  </div>
+</div>
+
+</body>
+</html>
