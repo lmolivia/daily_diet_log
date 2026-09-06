@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>식단 분석 · 2026.09.03</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
+  :root { --bg:#f7f7f5;--card:#fff;--border:#e8e8e4;--text:#1a1a1a;--muted:#999;--green:#3d9e5f;--green-bg:#edf7f1;--yellow:#d4920a;--yellow-bg:#fdf6e3;--red:#d04040;--red-bg:#fdf0f0;--blue:#3a6fd4;--blue-bg:#eef3fd;--tag-bg:#f0f0ec; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh;padding:28px 16px 60px;max-width:480px;margin:0 auto;}
+  .header{margin-bottom:20px;}
+  .date-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px;}
+  .date{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;}
+  .badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;}
+  .badge-active{background:var(--green-bg);color:var(--green);}
+  .subtitle{font-size:11px;color:var(--muted);margin-top:2px;}
+  .hero-banner{background:var(--green-bg);border:1px solid #b0ddc0;border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+  .hero-icon{font-size:22px;}
+  .hero-text .ht{font-size:12px;font-weight:700;color:var(--green);margin-bottom:2px;}
+  .hero-text .hd{font-size:11px;color:#4a8a60;line-height:1.5;}
+  .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+  .summary-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+  .summary-box .s-label{font-size:10px;color:var(--muted);margin-bottom:4px;}
+  .summary-box .s-value{font-family:'DM Mono',monospace;font-size:17px;font-weight:500;line-height:1;}
+  .summary-box .s-unit{font-size:9px;color:var(--muted);margin-top:2px;}
+  .s-ok .s-value{color:var(--green);} .s-warn .s-value{color:var(--yellow);} .s-bad .s-value{color:var(--red);}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:14px;}
+  .card-title{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;padding:14px 16px 10px;border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;}
+  table{width:100%;border-collapse:collapse;font-size:12px;}
+  thead th{padding:8px 12px;text-align:right;font-size:10px;font-weight:500;color:var(--muted);background:#fafaf8;border-bottom:1px solid var(--border);}
+  thead th:first-child{text-align:left;} thead th:nth-child(2){text-align:left;}
+  tbody td{padding:11px 12px;border-bottom:1px solid var(--border);vertical-align:top;text-align:right;color:#555;font-family:'DM Mono',monospace;font-size:11px;}
+  tbody td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;}
+  tbody td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:11px;color:#666;line-height:1.5;}
+  tbody tr:last-child td{border-bottom:none;}
+  tfoot td{padding:10px 12px;font-size:11px;font-weight:700;text-align:right;background:#fafaf8;border-top:1px solid var(--border);font-family:'DM Mono',monospace;}
+  tfoot td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--text);}
+  tfoot td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--muted);font-size:10px;font-weight:400;}
+  .feedback-wrap{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px;}
+  .fb{border-radius:10px;padding:12px 14px;font-size:12px;line-height:1.7;}
+  .fb-ok{background:var(--green-bg);color:#2a7048;} .fb-warn{background:var(--yellow-bg);color:#8a5f00;} .fb-tip{background:var(--blue-bg);color:#2a4a9a;}
+  .fb-head{font-weight:700;margin-bottom:4px;font-size:12px;}
+  .summary-footer{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 16px;text-align:center;}
+  .summary-text{font-size:13px;color:#444;line-height:1.9;}
+  .highlight{color:var(--green);font-weight:700;}
+  .note{font-size:10px;color:var(--muted);padding:10px 16px;text-align:right;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-row">
+    <span class="date">2026.09.03 (목)</span>
+    <span class="badge badge-active">🪜 계단 25분</span>
+  </div>
+  <div class="subtitle">운동일 기준 · 참고 목표 1500–1700kcal</div>
+</div>
+
+<div class="hero-banner">
+  <div class="hero-icon">🍝</div>
+  <div class="hero-text">
+    <div class="ht">이탈리안 코스 3개를 2명이 나눈 게 신의 한 수</div>
+    <div class="hd">크림파스타·리조또·관자까지 즐기고도 완벽한 밸런스야.</div>
+  </div>
+</div>
+
+<div class="summary-grid">
+  <div class="summary-box s-ok">
+    <div class="s-label">칼로리</div>
+    <div class="s-value">~1,400</div>
+    <div class="s-unit">거의 적정</div>
+  </div>
+  <div class="summary-box s-ok">
+    <div class="s-label">단백질</div>
+    <div class="s-value">~76g</div>
+    <div class="s-unit">달성 ✅</div>
+  </div>
+  <div class="summary-box s-ok">
+    <div class="s-label">탄수화물</div>
+    <div class="s-value">~122g</div>
+    <div class="s-unit">거의 적정</div>
+  </div>
+  <div class="summary-box s-ok">
+    <div class="s-label">지방</div>
+    <div class="s-value">~65g</div>
+    <div class="s-unit">달성 ✅</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">식사 기록</div>
+  <table>
+    <thead><tr><th>구분</th><th>메뉴</th><th>탄수</th><th>단백</th><th>지방</th><th>kcal</th></tr></thead>
+    <tbody>
+      <tr><td>점심</td><td>파케리크림파스타+프로슈토, 레드와인소고기찜리조또, 발사믹관자&감자퓨레 (3메뉴 2명 쉐어)</td><td>~75g</td><td>~38g</td><td>~46g</td><td>~900</td></tr>
+      <tr><td>간식</td><td>프로틴요거트120g+치아씨드5g, 무화과1개</td><td>~16g</td><td>~13g</td><td>~2g</td><td>~129</td></tr>
+      <tr><td>저녁</td><td>샌드위치(오트식빵1조각45g, 저지방햄60g, 슬라이스치즈1, 계란1, 라페70g, 로메인50g)</td><td>~31g</td><td>~26g</td><td>~17g</td><td>~371</td></tr>
+    </tbody>
+    <tfoot>
+      <tr><td>합계</td><td></td><td>~122g</td><td>~76g</td><td>~65g</td><td>~1,400</td></tr>
+      <tr><td>참고 목표</td><td style="font-size:10px;color:var(--muted)">운동일</td><td style="color:var(--muted)">100–120</td><td style="color:var(--muted)">75–85</td><td style="color:var(--muted)">60–70</td><td style="color:var(--muted)">1500–1700</td></tr>
+    </tfoot>
+  </table>
+</div>
+
+<div class="card">
+  <div class="card-title">피드백</div>
+  <div class="feedback-wrap">
+    <div class="fb fb-ok">
+      <div class="fb-head">✅ 잘한 것</div>
+      계단 25분(심박147bpm) 챙겼고, 크림파스타·리조또·관자처럼 원래 칼로리 밀도 높은 메뉴 3개를 즐기고도 2명이서 나눈 덕분에 네 지표 다 목표 범위에 딱 들어왔어. 저녁 샌드위치도 식빵 1조각만 써서 가볍게 마무리한 것도 좋았어.
+    </div>
+  </div>
+</div>
+
+<div class="summary-footer">
+  <div class="summary-text">
+    풍성한 이탈리안 코스를 즐기고도 완벽한 밸런스를 유지한 하루야.<br>
+    나눠 먹기 전략이 오늘도 확실히 통했어.<br><br>
+    <span class="highlight">이런 날이 진짜 이상적이야 👊</span>
+  </div>
+</div>
+
+</body>
+</html>
