@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>식단 분석 · 2026.09.13</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+  :root { --bg:#f7f7f5;--card:#fff;--border:#e8e8e4;--text:#1a1a1a;--muted:#999;--green:#3d9e5f;--green-bg:#edf7f1;--yellow:#d4920a;--yellow-bg:#fdf6e3;--red:#d04040;--red-bg:#fdf0f0;--blue:#3a6fd4;--blue-bg:#eef3fd;--tag-bg:#f0f0ec; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh;padding:28px 16px 60px;max-width:480px;margin:0 auto;}
+  .header{margin-bottom:20px;}
+  .date-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px;}
+  .date{font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:500;}
+  .badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;}
+  .badge-active{background:var(--green-bg);color:var(--green);}
+  .badge-warn{background:var(--red-bg);color:var(--red);}
+  .subtitle{font-size:11px;color:var(--muted);margin-top:2px;}
+  .hero-banner{background:var(--green-bg);border:1px solid #b0ddc0;border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+  .hero-icon{font-size:22px;}
+  .hero-text .ht{font-size:12px;font-weight:700;color:var(--green);margin-bottom:2px;}
+  .hero-text .hd{font-size:11px;color:#4a8a60;line-height:1.5;}
+  .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+  .summary-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+  .summary-box .s-label{font-size:10px;color:var(--muted);margin-bottom:4px;}
+  .summary-box .s-value{font-family:'Noto Sans KR',sans-serif;font-size:17px;font-weight:500;line-height:1;}
+  .summary-box .s-unit{font-size:9px;color:var(--muted);margin-top:2px;}
+  .s-ok .s-value{color:var(--green);} .s-warn .s-value{color:var(--yellow);} .s-bad .s-value{color:var(--red);}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:14px;}
+  .card-title{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;padding:14px 16px 10px;border-bottom:1px solid var(--border);font-family:'Noto Sans KR',sans-serif;}
+  table{width:100%;border-collapse:collapse;font-size:12px;}
+  thead th{padding:8px 12px;text-align:right;font-size:10px;font-weight:500;color:var(--muted);background:#fafaf8;border-bottom:1px solid var(--border);}
+  thead th:first-child{text-align:left;} thead th:nth-child(2){text-align:left;}
+  tbody td{padding:11px 12px;border-bottom:1px solid var(--border);vertical-align:top;text-align:right;color:#555;font-family:'Noto Sans KR',sans-serif;font-size:11px;}
+  tbody td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;}
+  tbody td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:11px;color:#666;line-height:1.5;}
+  tbody tr:last-child td{border-bottom:none;}
+  tfoot td{padding:10px 12px;font-size:11px;font-weight:700;text-align:right;background:#fafaf8;border-top:1px solid var(--border);font-family:'Noto Sans KR',sans-serif;}
+  tfoot td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--text);}
+  tfoot td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--muted);font-size:10px;font-weight:400;}
+  .feedback-wrap{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px;}
+  .fb{border-radius:10px;padding:12px 14px;font-size:12px;line-height:1.7;}
+  .fb-ok{background:var(--green-bg);color:#2a7048;} .fb-warn{background:var(--yellow-bg);color:#8a5f00;} .fb-tip{background:var(--blue-bg);color:#2a4a9a;}
+  .fb-head{font-weight:700;margin-bottom:4px;font-size:12px;}
+  .summary-footer{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 16px;text-align:center;}
+  .summary-text{font-size:13px;color:#444;line-height:1.9;}
+  .highlight{color:var(--green);font-weight:700;}
+  .note{font-size:10px;color:var(--muted);padding:10px 16px;text-align:right;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-row">
+    <span class="date">2026.09.13 (일)</span>
+    <span class="badge badge-active">💪 근력 55분</span>
+    <span class="badge badge-active">🪜 계단 60분</span>
+    <span class="badge badge-warn">🍷 와인 1병</span>
+  </div>
+  <div class="subtitle">운동일 기준 · 참고 목표 1500–1700kcal</div>
+</div>
+
+<div class="hero-banner">
+  <div class="hero-icon">💪</div>
+  <div class="hero-text">
+    <div class="ht">진짜 결심한 날 — 혼술 주1회 룰 시작</div>
+    <div class="hd">운동으로 743kcal 태우고, 음주 기준까지 구체적으로 세운 하루.</div>
+  </div>
+</div>
+
+<div class="summary-grid">
+  <div class="summary-box s-bad">
+    <div class="s-label">칼로리</div>
+    <div class="s-value">~2,107</div>
+    <div class="s-unit">초과 (24%)</div>
+  </div>
+  <div class="summary-box s-bad">
+    <div class="s-label">단백질</div>
+    <div class="s-value">~62g</div>
+    <div class="s-unit">미달 (16%)</div>
+  </div>
+  <div class="summary-box s-bad">
+    <div class="s-label">탄수화물</div>
+    <div class="s-value">~141g</div>
+    <div class="s-unit">초과 (18%)</div>
+  </div>
+  <div class="summary-box s-bad">
+    <div class="s-label">지방</div>
+    <div class="s-value">~84g</div>
+    <div class="s-unit">초과 (19%)</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">식사 기록</div>
+  <table>
+    <thead><tr><th>구분</th><th>메뉴</th><th>탄수</th><th>단백</th><th>지방</th><th>kcal</th></tr></thead>
+    <tbody>
+      <tr><td>점심</td><td>샌드위치(오트식빵50g 반쪽만+계란2개(노른자1개)+치즈1장+저지방햄60g+당근라페60g+양상추60g) + 무화과2개</td><td>~51g</td><td>~30g</td><td>~15g</td><td>~459</td></tr>
+      <tr><td>간식</td><td>초코케이크</td><td>30g</td><td>4g</td><td>32g</td><td>424</td></tr>
+      <tr><td>저녁</td><td>만두국(만두 + 국물 2/3만)</td><td>~46g</td><td>~29g</td><td>~36g</td><td>~624</td></tr>
+      <tr><td>음주</td><td>드라이 스파클링 와인 1병 (750ml 추정)</td><td>~15g</td><td>0g</td><td>0g</td><td>~600</td></tr>
+    </tbody>
+    <tfoot>
+      <tr><td>합계</td><td></td><td>~141g</td><td>~62g</td><td>~84g</td><td>~2,107</td></tr>
+      <tr><td>참고 목표</td><td style="font-size:10px;color:var(--muted)">운동일</td><td style="color:var(--muted)">100–120</td><td style="color:var(--muted)">75–85</td><td style="color:var(--muted)">60–70</td><td style="color:var(--muted)">1500–1700</td></tr>
+    </tfoot>
+  </table>
+  <div class="note">* 오트식빵·만두·만두국물은 알려준 값 그대로 사용(국물은 2/3만 반영). 계란·치즈·당근라페·양상추·무화과는 일반 수치로 추정. 운동 시간은 애플워치 기록 기준(근력 55:20, 계단 1:00:01)으로 반영.</div>
+</div>
+
+<div class="card">
+  <div class="card-title">피드백</div>
+  <div class="feedback-wrap">
+    <div class="fb fb-ok">
+      <div class="fb-head">✅ 잘한 것</div>
+      근력 55분+계단 60분, 총 743kcal 소모한 운동량 자체가 오늘의 하이라이트야. 그리고 음주 습관을 확실히 다잡겠다고 결심한 것도 좋았어 — 혼술 주1회, 약속 때는 조절 또는 논알콜 대체라는 구체적인 기준까지 정한 게 실행 가능성을 높여줘.
+    </div>
+    <div class="fb fb-warn">
+      <div class="fb-head">🔧 참고할 것</div>
+      탄수(18%)·지방(19%)·칼로리(24%) 다 초과, 단백질은 16% 부족 — 초코케이크+만두국(만두 자체가 고지방)+와인이 겹친 영향. 오늘 밤이 내일(월요일) 출근 전날이라 '출근 전날 노드링킹' 원칙 기준으로는 걸리는 타이밍인데, 혼술 주1회 룰을 오늘부터 카운트한다면 이번 주 1회로 치고 넘어가면 될 것 같아.
+    </div>
+    <div class="fb fb-tip">
+      <div class="fb-head">💡 참고</div>
+      만두국은 만두 자체가 고지방(1인분 지방 33g)이라 국물 조절해도 큰 차이는 안 나 — 다음엔 만두 개수를 줄이는 게 더 효과적일 수 있어.
+    </div>
+  </div>
+</div>
+
+<div class="summary-footer">
+  <div class="summary-text">
+    오늘은 운동도 확실히 챙기고 <span class="highlight">음주 습관도 제대로 다잡기로 결심한 날</span>이야.<br>
+    오늘 숫자는 초코케이크+만두+와인이 겹쳐서 넘친 편인데, 방금 세운 원칙을 이번 주부터 지켜나가면 금방 페이스 잡힐 거야.
+  </div>
+</div>
+
+</body>
+</html>
