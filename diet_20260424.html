@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<style>
+body { font-family: -apple-system, sans-serif; padding: 1rem; background: #fff; color: #1a1a1a; }
+.section-label { font-size: 13px; color: #666; font-weight: 500; margin-bottom: 8px; margin-top: 1.2rem; }
+.cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+.card { background: #f5f5f3; border-radius: 8px; padding: 0.75rem 1rem; text-align: center; }
+.card-label { font-size: 12px; color: #888; margin-bottom: 4px; }
+.card-value { font-size: 20px; font-weight: 500; }
+.card-unit { font-size: 11px; color: #888; }
+.table-wrap { border: 0.5px solid #e0e0e0; border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+thead tr { background: #f5f5f3; }
+th { padding: 10px 12px; text-align: center; font-weight: 500; font-size: 12px; color: #888; border-bottom: 0.5px solid #e0e0e0; }
+th:first-child { text-align: left; }
+td { padding: 10px 12px; text-align: center; border-bottom: 0.5px solid #e0e0e0; }
+td:first-child { text-align: left; font-weight: 500; }
+tr:last-child td { border-bottom: none; }
+.total-row td { background: #f5f5f3; font-weight: 500; }
+.goal-row td { font-size: 12px; color: #888; }
+.bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.bar-label { font-size: 12px; color: #888; width: 60px; flex-shrink: 0; }
+.bar-track { flex: 1; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 4px; }
+.bar-num { font-size: 12px; font-weight: 500; width: 90px; text-align: right; flex-shrink: 0; }
+.workout-box { border: 0.5px solid #e0e0e0; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.wcard { text-align: center; }
+.wcard-label { font-size: 11px; color: #888; margin-bottom: 4px; }
+.wcard-value { font-size: 16px; font-weight: 500; }
+</style>
+</head><body>
+<div class="section-label">2026.04.24 (금) — 운동 O</div>
+
+<div class="cards">
+  <div class="card"><div class="card-label">칼로리</div><div class="card-value">~960</div><div class="card-unit">kcal</div></div>
+  <div class="card"><div class="card-label">탄수화물</div><div class="card-value">~115</div><div class="card-unit">g</div></div>
+  <div class="card"><div class="card-label">단백질</div><div class="card-value">~67</div><div class="card-unit">g</div></div>
+  <div class="card"><div class="card-label">지방</div><div class="card-value">~27</div><div class="card-unit">g</div></div>
+</div>
+
+<div class="table-wrap">
+<table>
+  <thead><tr>
+    <th style="width:16%">구분</th>
+    <th style="width:32%">메뉴</th>
+    <th>탄수</th><th>단백질</th><th>지방</th><th>칼로리</th>
+  </tr></thead>
+  <tbody>
+    <tr><td>아침</td><td style="font-size:12px;color:#888">공복</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+    <tr><td>점심</td><td style="font-size:12px;color:#888">카이센동 (밥 2/3)</td><td>~55g</td><td>~28g</td><td>~12g</td><td>~430kcal</td></tr>
+    <tr><td>간식</td><td style="font-size:12px;color:#888">빼빼로</td><td>~12g</td><td>~1g</td><td>~4g</td><td>~80kcal</td></tr>
+    <tr><td>저녁</td><td style="font-size:12px;color:#888">참치김밥 1줄</td><td>~45g</td><td>~18g</td><td>~10g</td><td>~350kcal</td></tr>
+    <tr><td>운동 후</td><td style="font-size:12px;color:#888">셀렉스 프로핏 WPI</td><td>~3g</td><td>~20g</td><td>~1g</td><td>~99kcal</td></tr>
+    <tr class="total-row"><td>합계</td><td></td><td>~115g</td><td>~67g</td><td>~27g</td><td>~959kcal</td></tr>
+    <tr class="goal-row"><td>목표</td><td style="font-size:11px;color:#888">운동일 기준</td><td>80-100g</td><td>75-85g</td><td>40-50g</td><td>1500-1700kcal</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="section-label">목표 대비 달성률</div>
+<div class="bar-row">
+  <div class="bar-label">칼로리</div>
+  <div class="bar-track"><div class="bar-fill" style="width:60%;background:#E24B4A;"></div></div>
+  <div class="bar-num" style="color:#A32D2D;">959 / 1600</div>
+</div>
+<div class="bar-row">
+  <div class="bar-label">단백질</div>
+  <div class="bar-track"><div class="bar-fill" style="width:82%;background:#EF9F27;"></div></div>
+  <div class="bar-num" style="color:#854F0B;">67 / 80g</div>
+</div>
+<div class="bar-row">
+  <div class="bar-label">탄수화물</div>
+  <div class="bar-track"><div class="bar-fill" style="width:100%;background:#E24B4A;"></div></div>
+  <div class="bar-num" style="color:#A32D2D;">115 / 100g ↑</div>
+</div>
+<div class="bar-row">
+  <div class="bar-label">지방</div>
+  <div class="bar-track"><div class="bar-fill" style="width:60%;background:#EF9F27;"></div></div>
+  <div class="bar-num" style="color:#854F0B;">27 / 45g</div>
+</div>
+
+<div class="section-label" style="margin-top:1.5rem;">오늘 운동 기록</div>
+<div class="workout-box">
+  <div class="wcard"><div class="wcard-label">근력운동</div><div class="wcard-value">47분</div></div>
+  <div class="wcard"><div class="wcard-label">계단 유산소</div><div class="wcard-value">20분</div></div>
+  <div class="wcard"><div class="wcard-label">총 소모</div><div class="wcard-value">~404kcal</div></div>
+</div>
+</body></html>

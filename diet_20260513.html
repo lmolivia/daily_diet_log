@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<style>
+body { font-family: -apple-system, sans-serif; padding: 1rem; background: #fff; color: #1a1a1a; }
+.section-label { font-size: 13px; color: #666; font-weight: 500; margin-bottom: 8px; margin-top: 1.2rem; }
+.cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+.card { background: #f5f5f3; border-radius: 8px; padding: 0.75rem 1rem; text-align: center; }
+.card-label { font-size: 12px; color: #888; margin-bottom: 4px; }
+.card-value { font-size: 20px; font-weight: 500; }
+.card-unit { font-size: 11px; color: #888; }
+.table-wrap { border: 0.5px solid #e0e0e0; border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+thead tr { background: #f5f5f3; }
+th { padding: 10px 12px; text-align: center; font-weight: 500; font-size: 12px; color: #888; border-bottom: 0.5px solid #e0e0e0; }
+th:first-child { text-align: left; }
+td { padding: 10px 12px; text-align: center; border-bottom: 0.5px solid #e0e0e0; }
+td:first-child { text-align: left; font-weight: 500; }
+tr:last-child td { border-bottom: none; }
+.total-row td { background: #f5f5f3; font-weight: 500; }
+.goal-row td { font-size: 12px; color: #888; }
+.bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.bar-label { font-size: 12px; color: #888; width: 60px; flex-shrink: 0; }
+.bar-track { flex: 1; height: 10px; background: #f0f0f0; border-radius: 5px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 5px; }
+.bar-num { font-size: 12px; font-weight: 500; width: 100px; text-align: right; flex-shrink: 0; }
+.badge { display: inline-block; padding: 2px 7px; border-radius: 999px; font-size: 11px; font-weight: 500; margin-left: 4px; }
+.badge-ok { background: #EAF3DE; color: #3B6D11; }
+.badge-warn { background: #FAEEDA; color: #854F0B; }
+.badge-bad { background: #FCEBEC; color: #A32D2D; }
+</style>
+</head><body>
+
+<div class="section-label">2026.05.13 (수) — 운동 없음 &nbsp;<span class="badge badge-ok">금주 28일차 🎉</span></div>
+
+<div class="cards">
+  <div class="card"><div class="card-label">칼로리</div><div class="card-value">~1,200</div><div class="card-unit">kcal</div></div>
+  <div class="card"><div class="card-label">탄수화물</div><div class="card-value">~110</div><div class="card-unit">g</div></div>
+  <div class="card"><div class="card-label">단백질</div><div class="card-value">~82</div><div class="card-unit">g</div></div>
+  <div class="card"><div class="card-label">지방</div><div class="card-value">~38</div><div class="card-unit">g</div></div>
+</div>
+
+<div class="table-wrap">
+<table>
+  <thead><tr>
+    <th style="width:18%">구분</th>
+    <th style="width:30%">메뉴</th>
+    <th>탄수</th><th>단백질</th><th>지방</th><th>칼로리</th>
+  </tr></thead>
+  <tbody>
+    <tr><td>아침</td><td style="font-size:12px;color:#888">공복</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+    <tr><td>점심 전</td><td style="font-size:12px;color:#888">계란 1개</td><td>~1g</td><td>~6g</td><td>~5g</td><td>~70kcal</td></tr>
+    <tr><td>점심</td><td style="font-size:12px;color:#888">돼지불고기백반 (밥⅔ + 쌈채소위주)</td><td>~55g</td><td>~28g</td><td>~15g</td><td>~460kcal</td></tr>
+    <tr><td>간식1</td><td style="font-size:12px;color:#888">스니커즈</td><td>~30g</td><td>~4g</td><td>~12g</td><td>~250kcal</td></tr>
+    <tr><td>저녁</td><td style="font-size:12px;color:#888">프로틴쉐이크 + 프로틴요거트</td><td>~14g</td><td>~42g</td><td>~1g</td><td>~244kcal</td></tr>
+    <tr><td>간식2</td><td style="font-size:12px;color:#888">프로틴 과자</td><td>~26g</td><td>~7g</td><td>~8g</td><td>~205kcal</td></tr>
+    <tr class="total-row"><td>합계</td><td></td><td>~126g</td><td>~87g</td><td>~41g</td><td>~1,229kcal</td></tr>
+    <tr class="goal-row"><td>목표</td><td style="font-size:11px;color:#888">비운동일 기준</td><td>100-120g</td><td>75-85g</td><td>40-50g</td><td>1300-1500kcal</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="section-label">목표 대비 달성률</div>
+<div class="bar-row">
+  <div class="bar-label">칼로리</div>
+  <div class="bar-track"><div class="bar-fill" style="width:88%;background:#EF9F27;"></div></div>
+  <div class="bar-num" style="color:#854F0B;">1,229 / 1,400 <span class="badge badge-warn">약간 부족</span></div>
+</div>
+<div class="bar-row">
+  <div class="bar-label">단백질</div>
+  <div class="bar-track"><div class="bar-fill" style="width:100%;background:#1D9E75;"></div></div>
+  <div class="bar-num" style="color:#0F6E56;">87 / 80g <span class="badge badge-ok">달성 ✅</span></div>
+</div>
+<div class="bar-row">
+  <div class="bar-label">탄수화물</div>
+  <div class="bar-track"><div class="bar-fill" style="width:100%;background:#EF9F27;"></div></div>
+  <div class="bar-num" style="color:#854F0B;">126 / 120g <span class="badge badge-warn">약간 초과</span></div>
+</div>
+<div class="bar-row">
+  <div class="bar-label">지방</div>
+  <div class="bar-track"><div class="bar-fill" style="width:91%;background:#1D9E75;"></div></div>
+  <div class="bar-num" style="color:#0F6E56;">41 / 45g <span class="badge badge-ok">양호 ✅</span></div>
+</div>
+
+</body></html>

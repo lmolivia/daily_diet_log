@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>식단 분석 · 2026.06.01</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
+  :root {
+    --bg: #f7f7f5; --card: #ffffff; --border: #e8e8e4; --text: #1a1a1a; --muted: #999;
+    --green: #3d9e5f; --green-bg: #edf7f1; --yellow: #d4920a; --yellow-bg: #fdf6e3;
+    --red: #d04040; --red-bg: #fdf0f0; --blue: #3a6fd4; --blue-bg: #eef3fd; --tag-bg: #f0f0ec;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', sans-serif; min-height: 100vh; padding: 28px 16px 60px; max-width: 480px; margin: 0 auto; }
+
+  .header { margin-bottom: 20px; }
+  .date-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 2px; }
+  .date { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; }
+  .badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 500; }
+  .badge-workout { background: #eef3fd; color: var(--blue); border: 1px solid #c0d0f0; }
+  .subtitle { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .workout-banner { background: #eef3fd; border: 1px solid #c0d0f0; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 14px; }
+  .workout-icon { font-size: 26px; flex-shrink: 0; }
+  .workout-info { flex: 1; }
+  .workout-info .wt { font-size: 13px; font-weight: 700; color: var(--blue); margin-bottom: 6px; }
+  .workout-stats { display: flex; gap: 16px; }
+  .ws { text-align: center; }
+  .ws .wv { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 500; color: var(--text); }
+  .ws .wl { font-size: 10px; color: var(--muted); margin-top: 1px; }
+
+  .hero-banner { background: var(--green-bg); border: 1px solid #b0ddc0; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+  .hero-icon { font-size: 26px; flex-shrink: 0; }
+  .hero-text .ht { font-size: 13px; font-weight: 700; color: var(--green); margin-bottom: 2px; }
+  .hero-text .hd { font-size: 11px; color: #4a8a60; line-height: 1.5; }
+
+  /* 당알콜 노트 */
+  .choco-note { background: var(--yellow-bg); border: 1px solid #f0d090; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; font-size: 11px; color: #8a6000; line-height: 1.7; }
+  .choco-note b { color: var(--yellow); }
+
+  .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
+  .summary-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 8px; text-align: center; }
+  .summary-box .s-label { font-size: 10px; color: var(--muted); margin-bottom: 4px; }
+  .summary-box .s-value { font-family: 'DM Mono', monospace; font-size: 17px; font-weight: 500; line-height: 1; }
+  .summary-box .s-unit { font-size: 9px; color: var(--muted); margin-top: 2px; }
+  .s-ok .s-value { color: var(--green); }
+  .s-warn .s-value { color: var(--yellow); }
+  .s-bad .s-value { color: var(--red); }
+
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 14px; }
+  .card-title { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; padding: 14px 16px 10px; border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  thead th { padding: 8px 12px; text-align: right; font-size: 10px; font-weight: 500; color: var(--muted); background: #fafaf8; border-bottom: 1px solid var(--border); }
+  thead th:first-child { text-align: left; }
+  thead th:nth-child(2) { text-align: left; }
+  tbody td { padding: 11px 12px; border-bottom: 1px solid var(--border); vertical-align: top; text-align: right; color: #555; font-family: 'DM Mono', monospace; font-size: 11px; }
+  tbody td:first-child { text-align: left; font-family: 'Noto Sans KR', sans-serif; font-size: 12px; font-weight: 700; color: var(--text); white-space: nowrap; }
+  tbody td:nth-child(2) { text-align: left; font-family: 'Noto Sans KR', sans-serif; font-size: 11px; color: #666; line-height: 1.5; }
+  tbody tr:last-child td { border-bottom: none; }
+  tfoot td { padding: 10px 12px; font-size: 11px; font-weight: 700; text-align: right; background: #fafaf8; border-top: 1px solid var(--border); font-family: 'DM Mono', monospace; }
+  tfoot td:first-child { text-align: left; font-family: 'Noto Sans KR', sans-serif; color: var(--text); }
+  tfoot td:nth-child(2) { text-align: left; font-family: 'Noto Sans KR', sans-serif; color: var(--muted); font-size: 10px; font-weight: 400; }
+
+  .progress-section { padding: 14px 16px; }
+  .progress-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .progress-row:last-child { margin-bottom: 0; }
+  .p-label { font-size: 11px; color: var(--muted); width: 40px; flex-shrink: 0; }
+  .p-bar-wrap { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .p-bar { height: 100%; border-radius: 3px; }
+  .p-bar.ok { background: var(--green); }
+  .p-bar.warn { background: var(--yellow); }
+  .p-bar.bad { background: var(--red); }
+  .p-value { font-family: 'DM Mono', monospace; font-size: 11px; width: 90px; text-align: right; flex-shrink: 0; }
+  .p-value .actual { font-weight: 500; }
+  .p-value .sep { color: var(--border); margin: 0 2px; }
+  .p-value .target { color: var(--muted); }
+  .p-tag { font-size: 10px; padding: 2px 7px; border-radius: 8px; width: 52px; text-align: center; flex-shrink: 0; }
+  .p-tag.ok { background: var(--green-bg); color: var(--green); }
+  .p-tag.warn { background: var(--yellow-bg); color: var(--yellow); }
+  .p-tag.bad { background: var(--red-bg); color: var(--red); }
+
+  .feedback-wrap { padding: 0 16px 16px; display: flex; flex-direction: column; gap: 10px; }
+  .fb { border-radius: 10px; padding: 12px 14px; font-size: 12px; line-height: 1.7; }
+  .fb-ok { background: var(--green-bg); color: #2a7048; }
+  .fb-warn { background: var(--yellow-bg); color: #8a5f00; }
+  .fb-tip { background: var(--blue-bg); color: #2a4a9a; }
+  .fb-head { font-weight: 700; margin-bottom: 4px; font-size: 12px; }
+
+  .summary-footer { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px 16px; text-align: center; }
+  .score-num { font-family: 'DM Mono', monospace; font-size: 44px; font-weight: 500; color: var(--green); line-height: 1; }
+  .score-denom { font-size: 14px; color: var(--muted); }
+  .score-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .summary-text { font-size: 12px; color: #555; line-height: 1.8; margin-top: 12px; }
+  .highlight { color: var(--green); font-weight: 700; }
+  .note { font-size: 10px; color: var(--muted); padding: 10px 16px; text-align: right; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-row">
+    <span class="date">2026.06.01 (월)</span>
+    <span class="badge badge-workout">🪜 천국의 계단 31분</span>
+  </div>
+  <div class="subtitle">운동일 기준 · 목표 1500–1700kcal</div>
+</div>
+
+<!-- 운동 배너 -->
+<div class="workout-banner">
+  <div class="workout-icon">🪜</div>
+  <div class="workout-info">
+    <div class="wt">Stairs · 31분</div>
+    <div class="workout-stats">
+      <div class="ws"><div class="wv">151</div><div class="wl">avg BPM</div></div>
+      <div class="ws"><div class="wv">215</div><div class="wl">active kcal</div></div>
+      <div class="ws"><div class="wv">253</div><div class="wl">total kcal</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 밀프렙 히어로 -->
+<div class="hero-banner">
+  <div class="hero-icon">🍱</div>
+  <div class="hero-text">
+    <div class="ht">밀프렙 포케 첫 등장!</div>
+    <div class="hd">귀찮다던 사람이 새우 데치고 콩단백면에 드레싱까지 만들었어.<br>이게 sustainability야 👊</div>
+  </div>
+</div>
+
+<!-- 당알콜 노트 -->
+<div class="choco-note">
+  🍫 <b>무설탕 초콜릿 당알콜 계산</b><br>
+  표기 탄수 46g 중 당알콜 24g → 유효탄수 = 46 - (24 × 0.5) = <b>~34g</b><br>
+  15g 섭취 기준: 유효탄수 ~5.7g (표기 탄수 7.7g 대비 절반 수준)
+</div>
+
+<!-- 요약 수치 -->
+<div class="summary-grid">
+  <div class="summary-box s-ok">
+    <div class="s-label">칼로리</div>
+    <div class="s-value">~1,520</div>
+    <div class="s-unit">목표 내 ✅</div>
+  </div>
+  <div class="summary-box s-ok">
+    <div class="s-label">단백질</div>
+    <div class="s-value">~85g</div>
+    <div class="s-unit">달성 ✅</div>
+  </div>
+  <div class="summary-box s-ok">
+    <div class="s-label">탄수화물</div>
+    <div class="s-value">~112g</div>
+    <div class="s-unit">유효탄수 기준</div>
+  </div>
+  <div class="summary-box s-ok">
+    <div class="s-label">지방</div>
+    <div class="s-value">~48g</div>
+    <div class="s-unit">목표 내 ✅</div>
+  </div>
+</div>
+
+<!-- 식사 테이블 -->
+<div class="card">
+  <div class="card-title">식사 기록</div>
+  <table>
+    <thead>
+      <tr><th>구분</th><th>메뉴</th><th>탄수*</th><th>단백</th><th>지방</th><th>kcal</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>아침</td><td>공복 유지</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+      <tr><td>점심</td><td>밀프렙 포케 (콩단백면150g, 새우120g, 계란1, 양파후레이크10g, 청상추80g + 드레싱)</td><td>~28g</td><td>~38g</td><td>~8g</td><td>~340</td></tr>
+      <tr><td>점심+</td><td>키위 1개</td><td>~12g</td><td>~1g</td><td>—</td><td>~60</td></tr>
+      <tr><td>간식</td><td>스타벅스 휘낭시에 1개 (36g)</td><td>~14g</td><td>~3g</td><td>~17g</td><td>~221</td></tr>
+      <tr><td>간식+</td><td>무설탕 초콜릿 15g (유효탄수 적용)</td><td>~6g</td><td>~2g</td><td>~5g</td><td>~77</td></tr>
+      <tr><td>저녁</td><td>참치유부김밥 1줄</td><td>~45g</td><td>~12g</td><td>~10g</td><td>~320</td></tr>
+      <tr><td>저녁+</td><td>오렌지 1개</td><td>~15g</td><td>~1g</td><td>—</td><td>~60</td></tr>
+      <tr><td>간식</td><td>닭가슴살 육포 (92kcal)</td><td>~6g</td><td>~15g</td><td>~1g</td><td>~92</td></tr>
+      <tr><td>운동후</td><td>프로틴 음료 WPI</td><td>~2g</td><td>~20g</td><td>~1g</td><td>~99</td></tr>
+    </tbody>
+    <tfoot>
+      <tr><td>합계</td><td></td><td>~128g</td><td>~92g</td><td>~42g</td><td>~1,269</td></tr>
+      <tr><td>목표</td><td style="font-size:10px;color:var(--muted)">운동일 기준</td><td style="color:var(--muted)">100–120</td><td style="color:var(--muted)">75–85</td><td style="color:var(--muted)">40–50</td><td style="color:var(--muted)">1500–1700</td></tr>
+    </tfoot>
+  </table>
+  <div class="note">* 탄수화물은 당알콜 유효탄수(×0.5) 적용 기준 / 칼로리는 실제 섭취 기준</div>
+</div>
+
+<!-- 달성률 -->
+<div class="card">
+  <div class="card-title">목표 대비 달성률</div>
+  <div class="progress-section">
+    <div class="progress-row">
+      <span class="p-label">칼로리</span>
+      <div class="p-bar-wrap"><div class="p-bar warn" style="width:79%"></div></div>
+      <span class="p-value"><span class="actual">~1,269</span><span class="sep">/</span><span class="target">1,600</span></span>
+      <span class="p-tag warn">다소 부족</span>
+    </div>
+    <div class="progress-row">
+      <span class="p-label">단백질</span>
+      <div class="p-bar-wrap"><div class="p-bar ok" style="width:100%"></div></div>
+      <span class="p-value"><span class="actual">~92g</span><span class="sep">/</span><span class="target">80g</span></span>
+      <span class="p-tag ok">달성 ✅</span>
+    </div>
+    <div class="progress-row">
+      <span class="p-label">탄수화물</span>
+      <div class="p-bar-wrap"><div class="p-bar warn" style="width:100%"></div></div>
+      <span class="p-value"><span class="actual">~128g</span><span class="sep">/</span><span class="target">120g</span></span>
+      <span class="p-tag warn">약간 초과</span>
+    </div>
+    <div class="progress-row">
+      <span class="p-label">지방</span>
+      <div class="p-bar-wrap"><div class="p-bar ok" style="width:93%"></div></div>
+      <span class="p-value"><span class="actual">~42g</span><span class="sep">/</span><span class="target">45g</span></span>
+      <span class="p-tag ok">양호 ✅</span>
+    </div>
+  </div>
+</div>
+
+<!-- 피드백 -->
+<div class="card">
+  <div class="card-title">피드백</div>
+  <div class="feedback-wrap">
+    <div class="fb fb-ok">
+      <div class="fb-head">✅ 잘한 것</div>
+      <b>단백질 92g — 이번 주 최고 기록 갱신!</b> 밀프렙 포케(새우+계란) + 육포 + 프로틴 음료 조합이 완벽하게 맞아떨어졌어. 지방도 42g으로 목표 범위 안에 딱 들어왔고, 무설탕 초콜릿 당알콜 계산해서 유효탄수로 따지면 탄수도 선방했어. 과일 2종(키위+오렌지)으로 비타민·식이섬유도 챙긴 것도 👍
+    </div>
+    <div class="fb fb-warn">
+      <div class="fb-head">🔧 개선 포인트</div>
+      칼로리가 ~1,269kcal로 운동일 목표(1500–1700) 대비 많이 부족해. 천국의 계단 31분에 253kcal 태웠으니까 실질 순칼로리는 더 낮아. 단백질은 잘 채웠는데 <b>전체 에너지가 부족하면 근육 유지에 불리해</b> — 오늘처럼 운동 강도 있는 날은 밥 한 숟가락이라도 더 먹는 게 나아.<br><br>
+      휘낭시에가 지방 17g으로 간식치고 지방 비중이 높아. 다음엔 프로틴바나 육포로 대체하면 같은 칼로리에 단백질이 훨씬 올라가.
+    </div>
+    <div class="fb fb-tip">
+      <div class="fb-head">💡 밀프렙 포케 루틴 굳히기</div>
+      오늘 포케 구성 진짜 좋아. 콩단백면 저칼로리 + 새우 고단백 + 드레싱 기름 없음 — 이 조합 그대로 유지해. 다음엔 아보카도 30g 정도만 추가하면 건강한 지방도 채워지고 포만감도 올라가 🥑
+    </div>
+  </div>
+</div>
+
+<!-- 총평 -->
+<div class="summary-footer">
+  <span class="score-num">85</span><span class="score-denom"> / 100</span>
+  <div class="score-label">오늘의 점수</div>
+  <div class="summary-text">
+    단백질 92g · 지방 목표 달성 · 밀프렙 첫 등장.<br>
+    칼로리가 좀 부족한 게 아쉽지만<br>
+    구성 자체는 이번 주 제일 균형 잡혔어.<br><br>
+    <span class="highlight">귀찮음 이겨내고 밀프렙 만든 거, 진짜 잘했어. 👊</span>
+  </div>
+</div>
+
+</body>
+</html>

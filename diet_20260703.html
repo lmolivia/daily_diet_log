@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>식단 분석 · 2026.07.03</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
+  :root { --bg:#f7f7f5;--card:#fff;--border:#e8e8e4;--text:#1a1a1a;--muted:#999;--green:#3d9e5f;--green-bg:#edf7f1;--yellow:#d4920a;--yellow-bg:#fdf6e3;--red:#d04040;--red-bg:#fdf0f0;--blue:#3a6fd4;--blue-bg:#eef3fd;--tag-bg:#f0f0ec; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh;padding:28px 16px 60px;max-width:480px;margin:0 auto;}
+  .header{margin-bottom:20px;}
+  .date-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px;}
+  .date{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;}
+  .badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;}
+  .badge-rest{background:var(--tag-bg);color:var(--muted);}
+  .badge-health{background:#fdf0f5;color:#c04070;border:1px solid #f0c0d0;}
+  .badge-special{background:#fff8e1;color:#c47f00;border:1px solid #f0d070;}
+  .subtitle{font-size:11px;color:var(--muted);margin-top:2px;}
+  .note-banner{background:var(--yellow-bg);border:1px solid #f0d090;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:11px;color:#8a6000;line-height:1.6;}
+  .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+  .summary-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+  .summary-box .s-label{font-size:10px;color:var(--muted);margin-bottom:4px;}
+  .summary-box .s-value{font-family:'DM Mono',monospace;font-size:17px;font-weight:500;line-height:1;}
+  .summary-box .s-unit{font-size:9px;color:var(--muted);margin-top:2px;}
+  .s-ok .s-value{color:var(--green);} .s-warn .s-value{color:var(--yellow);} .s-bad .s-value{color:var(--red);}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:14px;}
+  .card-title{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;padding:14px 16px 10px;border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;}
+  table{width:100%;border-collapse:collapse;font-size:12px;}
+  thead th{padding:8px 12px;text-align:right;font-size:10px;font-weight:500;color:var(--muted);background:#fafaf8;border-bottom:1px solid var(--border);}
+  thead th:first-child{text-align:left;} thead th:nth-child(2){text-align:left;}
+  tbody td{padding:11px 12px;border-bottom:1px solid var(--border);vertical-align:top;text-align:right;color:#555;font-family:'DM Mono',monospace;font-size:11px;}
+  tbody td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;}
+  tbody td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:11px;color:#666;line-height:1.5;}
+  tbody tr:last-child td{border-bottom:none;}
+  tfoot td{padding:10px 12px;font-size:11px;font-weight:700;text-align:right;background:#fafaf8;border-top:1px solid var(--border);font-family:'DM Mono',monospace;}
+  tfoot td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--text);}
+  tfoot td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--muted);font-size:10px;font-weight:400;}
+  .progress-section{padding:14px 16px;}
+  .progress-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .progress-row:last-child{margin-bottom:0;}
+  .p-label{font-size:11px;color:var(--muted);width:40px;flex-shrink:0;}
+  .p-bar-wrap{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+  .p-bar{height:100%;border-radius:3px;}
+  .p-bar.ok{background:var(--green);} .p-bar.warn{background:var(--yellow);} .p-bar.bad{background:var(--red);}
+  .p-value{font-family:'DM Mono',monospace;font-size:11px;width:90px;text-align:right;flex-shrink:0;}
+  .p-value .actual{font-weight:500;} .p-value .sep{color:var(--border);margin:0 2px;} .p-value .target{color:var(--muted);}
+  .p-tag{font-size:10px;padding:2px 7px;border-radius:8px;width:52px;text-align:center;flex-shrink:0;}
+  .p-tag.ok{background:var(--green-bg);color:var(--green);} .p-tag.warn{background:var(--yellow-bg);color:var(--yellow);} .p-tag.bad{background:var(--red-bg);color:var(--red);}
+  .feedback-wrap{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px;}
+  .fb{border-radius:10px;padding:12px 14px;font-size:12px;line-height:1.7;}
+  .fb-ok{background:var(--green-bg);color:#2a7048;} .fb-warn{background:var(--yellow-bg);color:#8a5f00;} .fb-tip{background:var(--blue-bg);color:#2a4a9a;}
+  .fb-head{font-weight:700;margin-bottom:4px;font-size:12px;}
+  .summary-footer{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 16px;text-align:center;}
+  .score-num{font-family:'DM Mono',monospace;font-size:44px;font-weight:500;color:var(--yellow);line-height:1;}
+  .score-denom{font-size:14px;color:var(--muted);}
+  .score-label{font-size:11px;color:var(--muted);margin-top:2px;}
+  .summary-text{font-size:12px;color:#555;line-height:1.8;margin-top:12px;}
+  .highlight{color:var(--green);font-weight:700;}
+  .note{font-size:10px;color:var(--muted);padding:10px 16px;text-align:right;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-row">
+    <span class="date">2026.07.03 (목)</span>
+    <span class="badge badge-rest">운동 없음</span>
+    <span class="badge badge-health">🤒 회복 중</span>
+    <span class="badge badge-special">🍽️ 味적감각 오마카세</span>
+  </div>
+  <div class="subtitle">비운동일 기준 · 목표 1300–1500kcal · 오마카세 추정치 포함</div>
+</div>
+
+<div class="note-banner">
+  ⚠️ 오마카세 각 디쉬 한 입 사이즈 기준으로 추정 — 오차 범위 있어. 메뉴: 애피타이저, 오크라, 계란찜, 생선회, 대맛조개, 미니카이센동, 낙지, 어란모찌, 한우차돌박이, 한우채끝구이, 민물장어구이, 아로스티치니, 유즈코쇼 황태국수 (와인 1잔 미만)
+</div>
+
+<!-- 합계:
+양배추새우덮밥: 현미80g탄59단5지1 + 새우125g탄1단24지1 + 양배추250g탄15단5지0 + 소스탄8 + 계란탄1단6지5 = 탄84 단40 지7 580kcal
+플레인스콘: 탄35 단5 지12 275kcal
+프로틴요거트(요프로150g): 탄10 단15 지3 85kcal
+프로틴바1/2(당알콜적용): 탄11 단9 지4.5 115kcal
+
+오마카세(한입씩 13코스):
+애피타이저~탄5단3지2 50kcal
+오크라~탄4단1지0 20kcal
+계란찜~탄3단5지3 60kcal
+생선회~탄0단8지2 50kcal
+대맛조개~탄2단5지1 35kcal
+미니카이센동(밥소량+참치+성게+새우)~탄15단12지5 155kcal
+낙지~탄2단6지1 40kcal
+어란모찌~탄8단3지2 65kcal
+한우차돌박이~탄0단8지8 100kcal
+한우채끝구이~탄0단10지6 90kcal
+민물장어구이~탄5단8지6 105kcal
+아로스티치니(꼬치)~탄0단8지5 75kcal
+유즈코쇼황태국수~탄15단8지2 110kcal
+오마카세합계: 탄59 단85 지43 955kcal
+
+와인1잔미만: 탄5 단0 지0 60kcal
+
+총합계: 탄214 단154 지70 kcal2070 -->
+
+<div class="summary-grid">
+  <div class="summary-box s-bad">
+    <div class="s-label">칼로리</div>
+    <div class="s-value">~2,070</div>
+    <div class="s-unit">초과</div>
+  </div>
+  <div class="summary-box s-ok">
+    <div class="s-label">단백질</div>
+    <div class="s-value">~154g</div>
+    <div class="s-unit">역대급 ✅</div>
+  </div>
+  <div class="summary-box s-bad">
+    <div class="s-label">탄수화물</div>
+    <div class="s-value">~214g</div>
+    <div class="s-unit">초과</div>
+  </div>
+  <div class="summary-box s-bad">
+    <div class="s-label">지방</div>
+    <div class="s-value">~70g</div>
+    <div class="s-unit">초과</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">식사 기록</div>
+  <table>
+    <thead><tr><th>구분</th><th>메뉴</th><th>탄수*</th><th>단백</th><th>지방</th><th>kcal</th></tr></thead>
+    <tbody>
+      <tr><td>아침</td><td>공복 유지</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+      <tr><td>점심</td><td>양배추새우덮밥 (현미80g, 새우125g, 양배추250g, 소스각1TS, 계란1)</td><td>~84g</td><td>~40g</td><td>~7g</td><td>~580</td></tr>
+      <tr><td>디저트</td><td>플레인 스콘</td><td>~35g</td><td>~5g</td><td>~12g</td><td>~275</td></tr>
+      <tr><td>간식</td><td>프로틴 요거트 (요프로 150g)</td><td>~10g</td><td>~15g</td><td>~3g</td><td>~85</td></tr>
+      <tr><td>간식</td><td>프로틴바 1/2개 (당알콜 적용)</td><td>~11g</td><td>~9g</td><td>~5g</td><td>~115</td></tr>
+      <tr><td>저녁</td><td>오마카세 13코스 (애피타이저~유즈코쇼황태국수, 한입씩)</td><td>~59g</td><td>~85g</td><td>~43g</td><td>~955</td></tr>
+      <tr><td>저녁</td><td>와인 1잔 미만</td><td>~5g</td><td>—</td><td>—</td><td>~60</td></tr>
+    </tbody>
+    <tfoot>
+      <tr><td>합계</td><td></td><td>~204g</td><td>~154g</td><td>~70g</td><td>~2,070</td></tr>
+      <tr><td>목표</td><td style="font-size:10px;color:var(--muted)">비운동일</td><td style="color:var(--muted)">100–120</td><td style="color:var(--muted)">75–85</td><td style="color:var(--muted)">40–50</td><td style="color:var(--muted)">1300–1500</td></tr>
+    </tfoot>
+  </table>
+  <div class="note">* 탄수화물 당알콜 유효탄수 적용 / 오마카세 전체 추정치 — 오차 범위 큼</div>
+</div>
+
+<div class="card">
+  <div class="card-title">목표 대비 달성률</div>
+  <div class="progress-section">
+    <div class="progress-row"><span class="p-label">칼로리</span><div class="p-bar-wrap"><div class="p-bar bad" style="width:100%"></div></div><span class="p-value"><span class="actual">~2,070</span><span class="sep">/</span><span class="target">1,400</span></span><span class="p-tag bad">초과 ⚠</span></div>
+    <div class="progress-row"><span class="p-label">단백질</span><div class="p-bar-wrap"><div class="p-bar ok" style="width:100%"></div></div><span class="p-value"><span class="actual">~154g</span><span class="sep">/</span><span class="target">80g</span></span><span class="p-tag ok">역대급 🏅</span></div>
+    <div class="progress-row"><span class="p-label">탄수화물</span><div class="p-bar-wrap"><div class="p-bar bad" style="width:100%"></div></div><span class="p-value"><span class="actual">~204g</span><span class="sep">/</span><span class="target">120g</span></span><span class="p-tag bad">초과 ⚠</span></div>
+    <div class="progress-row"><span class="p-label">지방</span><div class="p-bar-wrap"><div class="p-bar bad" style="width:100%"></div></div><span class="p-value"><span class="actual">~70g</span><span class="sep">/</span><span class="target">45g</span></span><span class="p-tag bad">초과 ⚠</span></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">피드백</div>
+  <div class="feedback-wrap">
+    <div class="fb fb-ok">
+      <div class="fb-head">✅ 잘한 것</div>
+      <b>단백질 154g — 역대 최고 기록 🏅</b> 오마카세 메뉴가 해산물+한우 중심이라 단백질이 쌓인 거야. 한우 차돌+채끝, 생선회, 미니카이센동, 낙지, 민물장어 — 다 단백질 덩어리들이잖아. 와인도 1잔 미만으로 절제했어 👍
+    </div>
+    <div class="fb fb-warn">
+      <div class="fb-head">🔧 개선 포인트</div>
+      오마카세 자체는 어쩔 수 없는 부분이야 — 오늘 칼로리 초과는 점심 스콘이 없었으면 좀 달랐을 거야. 오마카세처럼 저녁이 확실히 많은 날엔 점심을 더 가볍게 가는 전략이 맞아.
+    </div>
+    <div class="fb fb-tip">
+      <div class="fb-head">💡 오마카세 있는 날 전략</div>
+      저녁 특식이 확정된 날엔 점심을 새우덮밥 유지하되 스콘 패스 + 간식 프로틴바·요거트만 — 그러면 저녁 여유가 생겨. 오늘은 그래도 단백질 역대급 찍은 날이야 😄
+    </div>
+  </div>
+</div>
+
+<div class="summary-footer">
+  <span class="score-num">73</span><span class="score-denom"> / 100</span>
+  <div class="score-label">오늘의 점수</div>
+  <div class="summary-text">
+    오마카세에서 단백질 역대 최고 154g.<br>
+    칼로리·탄수는 초과했지만 특별한 날이었으니까.<br><br>
+    <span class="highlight">味적감각, 이름값 했네 👊</span>
+  </div>
+</div>
+
+</body>
+</html>
