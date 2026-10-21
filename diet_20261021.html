@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>식단 분석 · 2026.10.21</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+  :root { --bg:#f7f7f5;--card:#fff;--border:#e8e8e4;--text:#1a1a1a;--muted:#999;--green:#3d9e5f;--green-bg:#edf7f1;--yellow:#d4920a;--yellow-bg:#fdf6e3;--red:#d04040;--red-bg:#fdf0f0;--blue:#3a6fd4;--blue-bg:#eef3fd;--tag-bg:#f0f0ec; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh;padding:28px 16px 60px;max-width:480px;margin:0 auto;}
+  .header{margin-bottom:20px;}
+  .date-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px;}
+  .date{font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:500;}
+  .badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;}
+  .badge-active{background:var(--green-bg);color:var(--green);}
+  .badge-neutral{background:var(--tag-bg);color:#777;}
+  .subtitle{font-size:11px;color:var(--muted);margin-top:2px;}
+  .hero-banner{background:var(--blue-bg);border:1px solid #b8cdf0;border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+  .hero-icon{font-size:22px;}
+  .hero-text .ht{font-size:12px;font-weight:700;color:var(--blue);margin-bottom:2px;}
+  .hero-text .hd{font-size:11px;color:#3a5a9a;line-height:1.5;}
+  .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+  .summary-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+  .summary-box .s-label{font-size:10px;color:var(--muted);margin-bottom:4px;}
+  .summary-box .s-value{font-family:'Noto Sans KR',sans-serif;font-size:17px;font-weight:500;line-height:1;}
+  .summary-box .s-unit{font-size:9px;color:var(--muted);margin-top:2px;}
+  .s-ok .s-value{color:var(--green);} .s-warn .s-value{color:var(--yellow);} .s-bad .s-value{color:var(--red);}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:14px;}
+  .card-title{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;padding:14px 16px 10px;border-bottom:1px solid var(--border);font-family:'Noto Sans KR',sans-serif;}
+  table{width:100%;border-collapse:collapse;font-size:12px;}
+  thead th{padding:8px 12px;text-align:right;font-size:10px;font-weight:500;color:var(--muted);background:#fafaf8;border-bottom:1px solid var(--border);}
+  thead th:first-child{text-align:left;} thead th:nth-child(2){text-align:left;}
+  tbody td{padding:11px 12px;border-bottom:1px solid var(--border);vertical-align:top;text-align:right;color:#555;font-family:'Noto Sans KR',sans-serif;font-size:11px;}
+  tbody td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;}
+  tbody td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:11px;color:#666;line-height:1.5;}
+  tbody tr:last-child td{border-bottom:none;}
+  tfoot td{padding:10px 12px;font-size:11px;font-weight:700;text-align:right;background:#fafaf8;border-top:1px solid var(--border);font-family:'Noto Sans KR',sans-serif;}
+  tfoot td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--text);}
+  tfoot td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--muted);font-size:10px;font-weight:400;}
+  .feedback-wrap{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px;}
+  .fb{border-radius:10px;padding:12px 14px;font-size:12px;line-height:1.7;}
+  .fb-ok{background:var(--green-bg);color:#2a7048;} .fb-warn{background:var(--yellow-bg);color:#8a5f00;} .fb-tip{background:var(--blue-bg);color:#2a4a9a;}
+  .fb-head{font-weight:700;margin-bottom:4px;font-size:12px;}
+  .summary-footer{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 16px;text-align:center;}
+  .summary-text{font-size:13px;color:#444;line-height:1.9;}
+  .highlight{color:var(--blue);font-weight:700;}
+  .progress{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);line-height:1.7;}
+  .note{font-size:10px;color:var(--muted);padding:10px 16px;text-align:right;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-row">
+    <span class="date">2026.10.21 (수)</span>
+    <span class="badge badge-neutral">🍪 간식 많은 날</span>
+    <span class="badge badge-active">🙅 노드링킹</span>
+  </div>
+  <div class="subtitle">휴식일 기준 · 참고 목표 1300–1500kcal · 탄수 130–150g</div>
+</div>
+
+<div class="hero-banner">
+  <div class="hero-icon">🍪</div>
+  <div class="hero-text">
+    <div class="ht">기력 없는 날, 간식이 하루 칼로리의 절반</div>
+    <div class="hd">통크, 감자과자, 스콘이 ~800kcal로 칼로리 초과의 대부분이야.</div>
+  </div>
+</div>
+
+<div class="summary-grid">
+  <div class="summary-box s-bad">
+    <div class="s-label">칼로리</div>
+    <div class="s-value">~1,686</div>
+    <div class="s-unit">초과 (12%)</div>
+  </div>
+  <div class="summary-box s-warn">
+    <div class="s-label">단백질</div>
+    <div class="s-value">~93g</div>
+    <div class="s-unit">초과 (10%)</div>
+  </div>
+  <div class="summary-box s-bad">
+    <div class="s-label">탄수화물</div>
+    <div class="s-value">~185g</div>
+    <div class="s-unit">초과 (23%)</div>
+  </div>
+  <div class="summary-box s-bad">
+    <div class="s-label">지방</div>
+    <div class="s-value">~64g</div>
+    <div class="s-unit">초과 (16%)</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">식사 기록</div>
+  <table>
+    <thead><tr><th>구분</th><th>메뉴</th><th>탄수</th><th>단백</th><th>지방</th><th>kcal</th></tr></thead>
+    <tbody>
+      <tr><td>점심</td><td>토마토스튜(소고기 75g) + 시금치새우프리타타 반 회분 + 통크</td><td>~60g</td><td>~44g</td><td>~26g</td><td>~637</td></tr>
+      <tr><td>간식</td><td>프로틴요거트 120g + 감자과자 45g</td><td>35g</td><td>~14g</td><td>~15g</td><td>~333</td></tr>
+      <tr><td>저녁</td><td>바마스무디(꿀 10g 포함) + 무가당요거트 100g + 프로틴가루 2스쿱 + 계란 1개</td><td>~52g</td><td>~31g</td><td>~10g</td><td>~416</td></tr>
+      <tr><td>야식</td><td>스콘 1개</td><td>~38g</td><td>~5g</td><td>~13g</td><td>~300</td></tr>
+    </tbody>
+    <tfoot>
+      <tr><td>합계</td><td></td><td>~185g</td><td>~93g</td><td>~64g</td><td>~1,686</td></tr>
+      <tr><td>참고 목표</td><td style="font-size:10px;color:var(--muted)">휴식일</td><td style="color:var(--muted)">130–150</td><td style="color:var(--muted)">75–85</td><td style="color:var(--muted)">45–55</td><td style="color:var(--muted)">1300–1500</td></tr>
+    </tfoot>
+  </table>
+  <div class="note">* 스튜는 계란 없이 한 판 전체, 프리타타는 평소 1회분의 절반으로 계산. 바마스무디는 꿀 10g이 들어간 새 기본값. 스콘은 종류와 크기를 몰라 일반 수치(~300kcal)로 추정. 통크와 감자과자는 알려준 값 사용.</div>
+</div>
+
+<div class="card">
+  <div class="card-title">피드백</div>
+  <div class="feedback-wrap">
+    <div class="fb fb-ok">
+      <div class="fb-head">✅ 잘한 것</div>
+      몸이 힘든 날에도 술 없이 보냈고, 끼니는 거르지 않고 세 번 챙겼어. 단백질도 충분했어.
+    </div>
+    <div class="fb fb-warn">
+      <div class="fb-head">🔧 참고할 것</div>
+      칼로리가 12%, 탄수가 23% 높아. 통크(236kcal), 감자과자(265kcal), 스콘(~300kcal) 세 개가 ~800kcal로 하루의 거의 절반이야.
+    </div>
+    <div class="fb fb-tip">
+      <div class="fb-head">💡 참고</div>
+      초과분은 ~190kcal라서 크게 걱정할 정도는 아니야. 내일 일부러 덜 먹어서 맞추지 말고 평소 세 끼로 돌아가면 돼. 접종 뒤 피로감은 하루 이틀 안에 가라앉는 경우가 많아.
+    </div>
+  </div>
+</div>
+
+<div class="summary-footer">
+  <div class="summary-text">
+    <span class="highlight">힘든 날 간식이 늘어난 건 자연스러운 일</span>이야.<br>
+    내일은 평소 페이스로 돌아가면 충분해.
+  </div>
+  <div class="progress">
+    10월 진행 (21일차)<br>
+    운동 10/21일 · 금주 14/21일(67%)
+  </div>
+</div>
+
+</body>
+</html>
