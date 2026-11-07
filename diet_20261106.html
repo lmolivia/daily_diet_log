@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>식단 분석 · 2026.11.06</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+  :root { --bg:#f7f7f5;--card:#fff;--border:#e8e8e4;--text:#1a1a1a;--muted:#999;--green:#3d9e5f;--green-bg:#edf7f1;--yellow:#d4920a;--yellow-bg:#fdf6e3;--red:#d04040;--red-bg:#fdf0f0;--blue:#3a6fd4;--blue-bg:#eef3fd;--tag-bg:#f0f0ec; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh;padding:28px 16px 60px;max-width:480px;margin:0 auto;}
+  .header{margin-bottom:20px;}
+  .date-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px;}
+  .date{font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:500;}
+  .badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;}
+  .badge-active{background:var(--green-bg);color:var(--green);}
+  .badge-neutral{background:var(--tag-bg);color:#777;}
+  .subtitle{font-size:11px;color:var(--muted);margin-top:2px;}
+  .hero-banner{background:var(--green-bg);border:1px solid #b0ddc0;border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+  .hero-icon{font-size:22px;}
+  .hero-text .ht{font-size:12px;font-weight:700;color:var(--green);margin-bottom:2px;}
+  .hero-text .hd{font-size:11px;color:#4a8a60;line-height:1.5;}
+  .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+  .summary-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+  .summary-box .s-label{font-size:10px;color:var(--muted);margin-bottom:4px;}
+  .summary-box .s-value{font-family:'Noto Sans KR',sans-serif;font-size:17px;font-weight:500;line-height:1;}
+  .summary-box .s-unit{font-size:9px;color:var(--muted);margin-top:2px;}
+  .s-ok .s-value{color:var(--green);} .s-warn .s-value{color:var(--yellow);} .s-bad .s-value{color:var(--red);}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:14px;}
+  .card-title{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;padding:14px 16px 10px;border-bottom:1px solid var(--border);font-family:'Noto Sans KR',sans-serif;}
+  table{width:100%;border-collapse:collapse;font-size:12px;}
+  thead th{padding:8px 12px;text-align:right;font-size:10px;font-weight:500;color:var(--muted);background:#fafaf8;border-bottom:1px solid var(--border);}
+  thead th:first-child{text-align:left;} thead th:nth-child(2){text-align:left;}
+  tbody td{padding:11px 12px;border-bottom:1px solid var(--border);vertical-align:top;text-align:right;color:#555;font-family:'Noto Sans KR',sans-serif;font-size:11px;}
+  tbody td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;}
+  tbody td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:11px;color:#666;line-height:1.5;}
+  tbody tr:last-child td{border-bottom:none;}
+  tfoot td{padding:10px 12px;font-size:11px;font-weight:700;text-align:right;background:#fafaf8;border-top:1px solid var(--border);font-family:'Noto Sans KR',sans-serif;}
+  tfoot td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--text);}
+  tfoot td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--muted);font-size:10px;font-weight:400;}
+  .feedback-wrap{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px;}
+  .fb{border-radius:10px;padding:12px 14px;font-size:12px;line-height:1.7;}
+  .fb-ok{background:var(--green-bg);color:#2a7048;} .fb-warn{background:var(--yellow-bg);color:#8a5f00;} .fb-tip{background:var(--blue-bg);color:#2a4a9a;}
+  .fb-head{font-weight:700;margin-bottom:4px;font-size:12px;}
+  .summary-footer{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 16px;text-align:center;}
+  .summary-text{font-size:13px;color:#444;line-height:1.9;}
+  .highlight{color:var(--green);font-weight:700;}
+  .progress{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);line-height:1.7;}
+  .note{font-size:10px;color:var(--muted);padding:10px 16px;text-align:right;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-row">
+    <span class="date">2026.11.06 (금)</span>
+    <span class="badge badge-neutral">📅 기록 205일차</span>
+    <span class="badge badge-active">💪 PT 마지막 수업</span>
+    <span class="badge badge-active">☕ 커피 0 · 10일차</span>
+    <span class="badge badge-active">🙅 혼술 0 · 10일차</span>
+  </div>
+  <div class="subtitle">운동일 기준 · 참고 목표 1500–1700kcal · 탄수 130–150g</div>
+</div>
+
+<div class="hero-banner">
+  <div class="hero-icon">🎓</div>
+  <div class="hero-text">
+    <div class="ht">PT 마지막 날, 숫자도 목표에 거의 다 맞았어</div>
+    <div class="hd">칼로리, 단백질, 지방이 모두 범위 안이야. 기록은 205일째야.</div>
+  </div>
+</div>
+
+<div class="summary-grid">
+  <div class="summary-box s-ok">
+    <div class="s-label">칼로리</div>
+    <div class="s-value">~1,505</div>
+    <div class="s-unit">달성 ✅</div>
+  </div>
+  <div class="summary-box s-ok">
+    <div class="s-label">단백질</div>
+    <div class="s-value">~82g</div>
+    <div class="s-unit">달성 ✅</div>
+  </div>
+  <div class="summary-box s-warn">
+    <div class="s-label">탄수화물</div>
+    <div class="s-value">~157g</div>
+    <div class="s-unit">초과 (5%)</div>
+  </div>
+  <div class="summary-box s-ok">
+    <div class="s-label">지방</div>
+    <div class="s-value">~60g</div>
+    <div class="s-unit">달성 ✅</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">식사 기록</div>
+  <table>
+    <thead><tr><th>구분</th><th>메뉴</th><th>탄수</th><th>단백</th><th>지방</th><th>kcal</th></tr></thead>
+    <tbody>
+      <tr><td>아침</td><td>계란 2개(노른자 1개만)</td><td>~1g</td><td>~10g</td><td>~5g</td><td>~89</td></tr>
+      <tr><td>점심</td><td>토마토스튜(소고기 100g 버전) + 계란 1개 + 밤</td><td>~47g</td><td>~34g</td><td>~14g</td><td>~447</td></tr>
+      <tr><td>간식</td><td>무화과 스콘 1개 + 감자과자 30g</td><td>~64g</td><td>~8g</td><td>~27g</td><td>~535</td></tr>
+      <tr><td>저녁</td><td>삼각김밥 + 무가당요거트 150g + 치아씨드 5g + 피넛버터가루 13g + 계란 2개(노른자 1개만)</td><td>~45g</td><td>~31g</td><td>~15g</td><td>~435</td></tr>
+    </tbody>
+    <tfoot>
+      <tr><td>합계</td><td></td><td>~157g</td><td>~82g</td><td>~60g</td><td>~1,505</td></tr>
+      <tr><td>참고 목표</td><td style="font-size:10px;color:var(--muted)">운동일</td><td style="color:var(--muted)">130–150</td><td style="color:var(--muted)">75–85</td><td style="color:var(--muted)">60–70</td><td style="color:var(--muted)">1500–1700</td></tr>
+    </tfoot>
+  </table>
+  <div class="note">* 10/18에는 토마토스튜 기록이 없어서 10/28 레시피(소고기 100g, 양배추 100g, 양파 100g, 퓨레 1/3, 계란 없이)로 계산. 무화과 스콘은 일반 수치(~350kcal). 감자과자는 30g(~185kcal)으로 가정. 치아씨드 5g은 일반 수치. 운동 후 음료는 기록이 없어 제외.</div>
+</div>
+
+<div class="card">
+  <div class="card-title">피드백</div>
+  <div class="feedback-wrap">
+    <div class="fb fb-ok">
+      <div class="fb-head">✅ 잘한 것</div>
+      PT 마지막 날을 목표 범위 3개로 마무리했어. 커피와 혼술 10일차를 이어갔고, 기록은 205일째야. 205일 동안 기록을 이어온 게 가장 큰 자산이야.
+    </div>
+    <div class="fb fb-warn">
+      <div class="fb-head">🔧 참고할 것</div>
+      탄수만 5% 높아. 간식(스콘 ~43g, 과자 ~21g)이 하루 탄수의 41%를 차지했어.
+    </div>
+    <div class="fb fb-tip">
+      <div class="fb-head">💡 참고</div>
+      PT가 끝나면 혼자 하는 루틴이 필요해. 주 3~4회 중에 요일을 먼저 정해두면 귀찮은 날에도 덜 흔들려.
+    </div>
+  </div>
+</div>
+
+<div class="summary-footer">
+  <div class="summary-text">
+    <span class="highlight">PT를 잘 마무리한 하루</span>야.<br>
+    이제 혼자 하는 루틴을 정해볼 차례야.
+  </div>
+  <div class="progress">
+    11월 진행 (6일차) · 기록 205일차<br>
+    운동 2/6일 · 금주 6/6일(100%)<br>
+    ☕ 커피 끊기 10일차 (연속 10일 · 누적 10일)<br>
+    🙅 혼술 0 10일차 (연속 10일 · 누적 10일)
+  </div>
+</div>
+
+</body>
+</html>
