@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>식단 분석 · 2026.11.18</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+  :root { --bg:#f7f7f5;--card:#fff;--border:#e8e8e4;--text:#1a1a1a;--muted:#999;--green:#3d9e5f;--green-bg:#edf7f1;--yellow:#d4920a;--yellow-bg:#fdf6e3;--red:#d04040;--red-bg:#fdf0f0;--blue:#3a6fd4;--blue-bg:#eef3fd;--tag-bg:#f0f0ec; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh;padding:28px 16px 60px;max-width:480px;margin:0 auto;}
+  .header{margin-bottom:20px;}
+  .date-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px;}
+  .date{font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:500;}
+  .badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;}
+  .badge-active{background:var(--green-bg);color:var(--green);}
+  .badge-neutral{background:var(--tag-bg);color:#777;}
+  .subtitle{font-size:11px;color:var(--muted);margin-top:2px;}
+  .hero-banner{background:var(--green-bg);border:1px solid #b0ddc0;border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+  .hero-icon{font-size:22px;}
+  .hero-text .ht{font-size:12px;font-weight:700;color:var(--green);margin-bottom:2px;}
+  .hero-text .hd{font-size:11px;color:#4a8a60;line-height:1.5;}
+  .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+  .summary-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+  .summary-box .s-label{font-size:10px;color:var(--muted);margin-bottom:4px;}
+  .summary-box .s-value{font-family:'Noto Sans KR',sans-serif;font-size:17px;font-weight:500;line-height:1;}
+  .summary-box .s-unit{font-size:9px;color:var(--muted);margin-top:2px;}
+  .s-ok .s-value{color:var(--green);} .s-warn .s-value{color:var(--yellow);} .s-bad .s-value{color:var(--red);}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:14px;}
+  .card-title{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;padding:14px 16px 10px;border-bottom:1px solid var(--border);font-family:'Noto Sans KR',sans-serif;}
+  table{width:100%;border-collapse:collapse;font-size:12px;}
+  thead th{padding:8px 12px;text-align:right;font-size:10px;font-weight:500;color:var(--muted);background:#fafaf8;border-bottom:1px solid var(--border);}
+  thead th:first-child{text-align:left;} thead th:nth-child(2){text-align:left;}
+  tbody td{padding:11px 12px;border-bottom:1px solid var(--border);vertical-align:top;text-align:right;color:#555;font-family:'Noto Sans KR',sans-serif;font-size:11px;}
+  tbody td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;}
+  tbody td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:11px;color:#666;line-height:1.5;}
+  tbody tr:last-child td{border-bottom:none;}
+  tfoot td{padding:10px 12px;font-size:11px;font-weight:700;text-align:right;background:#fafaf8;border-top:1px solid var(--border);font-family:'Noto Sans KR',sans-serif;}
+  tfoot td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--text);}
+  tfoot td:nth-child(2){text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--muted);font-size:10px;font-weight:400;}
+  .feedback-wrap{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px;}
+  .fb{border-radius:10px;padding:12px 14px;font-size:12px;line-height:1.7;}
+  .fb-ok{background:var(--green-bg);color:#2a7048;} .fb-warn{background:var(--yellow-bg);color:#8a5f00;} .fb-tip{background:var(--blue-bg);color:#2a4a9a;}
+  .fb-head{font-weight:700;margin-bottom:4px;font-size:12px;}
+  .summary-footer{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 16px;text-align:center;}
+  .summary-text{font-size:13px;color:#444;line-height:1.9;}
+  .highlight{color:var(--green);font-weight:700;}
+  .note{font-size:10px;color:var(--muted);padding:10px 16px;text-align:right;line-height:1.6;}
+  .progress{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-top:14px;font-size:11px;color:#555;line-height:1.9;}
+  .progress b{color:var(--text);}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-row">
+    <span class="date">2026.11.18 (수)</span>
+    <span class="badge badge-active">📅 기록 217일차</span>
+    <span class="badge badge-active">🏁 챌린지 10일차</span>
+    <span class="badge badge-active">🪜 공복 천국의계단 30분</span>
+    <span class="badge badge-active">☕ 커피 끊기 22일차</span>
+    <span class="badge badge-active">🙅 혼술 0 · 22일차</span>
+  </div>
+  <div class="subtitle">운동일 기준 · 참고 목표 1500–1700kcal</div>
+</div>
+
+<div class="hero-banner">
+  <div class="hero-icon">🍕</div>
+  <div class="hero-text">
+    <div class="ht">공복 운동으로 시작해 피자 저녁까지 즐긴 하루</div>
+    <div class="hd">점심 밀프렙으로 단백질 기반을 잡고, 저녁 피자는 물만 마시며 쉐어했어.</div>
+  </div>
+</div>
+
+<div class="summary-grid">
+  <div class="summary-box s-warn"><div class="s-label">칼로리</div><div class="s-value">~1,895</div><div class="s-unit">초과 (11%)</div></div>
+  <div class="summary-box s-bad"><div class="s-label">단백질</div><div class="s-value">~106g</div><div class="s-unit">초과 (25%)</div></div>
+  <div class="summary-box s-bad"><div class="s-label">탄수화물</div><div class="s-value">~177g</div><div class="s-unit">초과 (18%)</div></div>
+  <div class="summary-box s-bad"><div class="s-label">지방</div><div class="s-value">~88g</div><div class="s-unit">초과 (26%)</div></div>
+</div>
+
+<div class="card">
+  <div class="card-title">식사 기록</div>
+  <table>
+    <thead><tr><th>구분</th><th>메뉴</th><th>탄수</th><th>단백</th><th>지방</th><th>kcal</th></tr></thead>
+    <tbody>
+      <tr><td>점심</td><td>밀프렙 (닭가슴살 130g + 팬네 40g + 보코치니 50g + 바질페스토 30g + 오이 130g + 방울토마토 100g, 조리 전)</td><td>~39g</td><td>~46g</td><td>~27g</td><td>~576</td></tr>
+      <tr><td>간식</td><td>프로틴요거트 135g + 치아씨드 5g + 피넛버터파우더 10g + 무가당카카오 5g, 하루견과, 초코 프레첼</td><td>~45g</td><td>~29g</td><td>~25g</td><td>~489</td></tr>
+      <tr><td>저녁</td><td>마르게리타 + 고르곤졸라 + 루꼴라 샐러드 (3개를 2명이 쉐어, 각 1/2) + 꿀 소량, 물</td><td>~94g</td><td>~32g</td><td>~37g</td><td>~830</td></tr>
+    </tbody>
+    <tfoot>
+      <tr><td>합계</td><td></td><td>~177g</td><td>~106g</td><td>~88g</td><td>~1,895</td></tr>
+      <tr><td>참고 목표</td><td style="font-size:10px;color:var(--muted)">운동일</td><td style="color:var(--muted)">130–150</td><td style="color:var(--muted)">75–85</td><td style="color:var(--muted)">60–70</td><td style="color:var(--muted)">1500–1700</td></tr>
+    </tfoot>
+  </table>
+  <div class="note">* 가정: 마르게리타(작은 화덕 1판) ~650kcal, 고르곤졸라 ~750kcal, 루꼴라 샐러드(치즈·발사믹 포함) ~200kcal로 보고 2명이 반반 나눈 걸로 계산했어. 사진 속 꿀 접시는 10g(~30kcal)만 먹은 걸로 봤어. 바질페스토는 100g당 ~470kcal 추정이야. 하루견과는 이번에 알려준 값(22g에 145kcal)을 썼고, 탄·단·지는 견과 믹스 일반 수치로 추정했어. 요거트는 YoPRO 150g 기준을 135g으로 환산했어. 운동 후 프로틴음료는 기록이 없어서 넣지 않았어.</div>
+</div>
+
+<div class="card">
+  <div class="card-title">피드백</div>
+  <div class="feedback-wrap">
+    <div class="fb fb-ok">
+      <div class="fb-head">✅ 잘한 것</div>
+      아침 공복 천국의계단 30분으로 하루를 열었고, 점심 밀프렙으로 단백질을 46g 채웠어. 저녁 피자 자리에서 물만 마시고 쉐어한 것도 좋았어. 커피·혼술 0은 22일째야.
+    </div>
+    <div class="fb fb-warn">
+      <div class="fb-head">🔧 참고할 것</div>
+      네 항목 모두 목표를 넘겼는데, 지방 88g(+26%)이 제일 커. 점심의 페스토·보코치니, 간식의 견과, 저녁 고르곤졸라 치즈가 겹쳤어. 칼로리는 목표 대비 11%라서 폭이 크진 않아.
+    </div>
+    <div class="fb fb-tip">
+      <div class="fb-head">💡 참고</div>
+      하루에 치즈류가 세 번(보코치니·고르곤졸라·샐러드 치즈) 나왔어. 그래도 외식 저녁이 있는 날이라 점심을 담백하게 가져간 구조는 맞았어. 내일은 평소 루틴으로 돌아오면 충분해.
+    </div>
+  </div>
+</div>
+
+<div class="summary-footer">
+  <div class="summary-text">
+    <span class="highlight">운동하고 즐겁게 먹은 수요일.</span><br>
+    숫자는 조금 넘쳤지만 흐름은 좋았어.
+  </div>
+</div>
+
+<div class="progress">
+  <b>11월 진행 (18일차) · 기록 217일차</b><br>
+  운동 10/18일 · 금주 18/18일(100%)<br>
+  🏁 100일 챌린지 10일차 (운동 7/10일, 종료일 2027.02.16)<br>
+  ☕ 커피 끊기 22일차 (연속 22일 · 누적 22일)<br>
+  🙅 혼술 0 22일차 (연속 22일 · 누적 22일)
+</div>
+
+</body>
+</html>
